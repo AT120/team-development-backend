@@ -1,7 +1,7 @@
-namespace TeamDevelopmentBackend.Models
+namespace TeamDevelopmentBackend.Model
 {
 
-    public class SubjectModel
+    public class SubjectDbModel
     {
         
         public Guid Id { get; set; }
