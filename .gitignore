@@ -1,4 +1,6 @@
 TeamDevelopmentBackend/TeamDevelopmentBackend/bin
 TeamDevelopmentBackend/TeamDevelopmentBackend/obj
-.vscode
-TeamDevelopmentBackend/.vs
+*.vscode
+*.vs
+TeamDevelopmentBackend/TeamDevelopmentBackend/appsettings.*.json
+TeamDevelopmentBackend/TeamDevelopmentBackend/Properties
