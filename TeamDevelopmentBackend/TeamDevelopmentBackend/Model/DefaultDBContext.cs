@@ -13,7 +13,7 @@ public class DefaultDBContext: DbContext
     public DbSet<UserDbModel> Users { get; set; }
     public DefaultDBContext(DbContextOptions<DefaultDBContext> options): base(options)
     {
-        Database.EnsureCreated();
+      //  Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
