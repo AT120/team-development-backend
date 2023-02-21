@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers
 {
-    [Route("api/subject")]
+    [Route("api/group")]
     [ApiController]
-    public class AdminSubjectController : ControllerBase
+    public class AdminGroupController : ControllerBase
     {
-        private ISubjectService _subjectService;
-        public AdminSubjectController(ISubjectService subjectService) 
+        private IGroupService _groupService;
+        public AdminGroupController(IGroupService groupService)
         {
-            _subjectService= subjectService;
+            _groupService = groupService;
         }
         [HttpPost("{name}")]
         public async Task<IActionResult> Post(string name)
@@ -20,28 +19,26 @@ namespace TeamDevelopmentBackend.Controllers
 
             try
             {
-                await _subjectService.AddSubject(name);
+                await _groupService.AddGroup(name);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return Problem(ex.Message, statusCode: 409);
+                return Problem("", statusCode: 502);
             }
         }
-        [HttpDelete("{subjectId}")]
+        [HttpDelete("{groupId}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                await _subjectService.DeleteSubject(id);
-                return Ok();   
+                await _groupService.DeleteGroup(id);
+                return Ok();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return Problem(ex.Message, statusCode: 404);
             }
         }
-
-
     }
 }
