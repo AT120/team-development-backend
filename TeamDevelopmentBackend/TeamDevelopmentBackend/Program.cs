@@ -1,5 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.EntityFrameworkCore;
+using TeamDevelopmentBackend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DefaultDBContext> (options => options.UseNpgsql(connection));
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -21,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
 }
+
 
 app.UseHttpsRedirection();
 
