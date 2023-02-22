@@ -19,7 +19,9 @@ namespace TeamDevelopmentBackend.Model
         public Guid GroupId { get; set; }
         public GroupDbModel Group { get; set; }
 
-        public DateOnly Date { get; set; } 
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public int WeekDay { get; set; }
 
     }
 }
