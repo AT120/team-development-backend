@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
@@ -15,13 +16,18 @@ public class DefaultDBContext: DbContext
     {
       //  Database.EnsureCreated();
     }
-
+    public async Task<bool> CheckIfCanBeAddedInDatabase(LessonDbModel model)
+    {
+       var checker = await this.Lessons.Where(x => (x.TimeSlot == model.TimeSlot && 
+        x.WeekDay == model.WeekDay && 
+        model.StartDate < x.EndDate && 
+        model.StartDate >= x.StartDate)
+        && (x.TeacherId == model.TeacherId || x.GroupId == model.GroupId || x.RoomId == model.RoomId)).FirstOrDefaultAsync();
+        return checker != null;
+    } 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LessonDbModel>().HasIndex(x => new{ x.TimeSlot, x.Date, x.RoomId }).IsUnique();
-        modelBuilder.Entity<LessonDbModel>().HasIndex(x => new { x.TimeSlot, x.Date, x.TeacherId }).IsUnique();
-        modelBuilder.Entity<LessonDbModel>().HasIndex(x => new { x.TimeSlot, x.Date, x.GroupId }).IsUnique();
-        modelBuilder.Entity<SubjectDbModel>().HasIndex(x=>x.Name).IsUnique();
+        
     }
 
 }
