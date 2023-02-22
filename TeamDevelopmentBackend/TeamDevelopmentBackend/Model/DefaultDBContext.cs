@@ -18,7 +18,7 @@ public class DefaultDBContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LessonDbModel>().HasIndex(x => new{ x.TimeSlot, x.Date, x.RoomId }).IsUnique();
+        modelBuilder.Entity<LessonDbModel>().HasIndex(x => new { x.TimeSlot, x.Date, x.RoomId }).IsUnique();
         modelBuilder.Entity<LessonDbModel>().HasIndex(x => new { x.TimeSlot, x.Date, x.TeacherId }).IsUnique();
         modelBuilder.Entity<LessonDbModel>().HasIndex(x => new { x.TimeSlot, x.Date, x.GroupId }).IsUnique();
     }
