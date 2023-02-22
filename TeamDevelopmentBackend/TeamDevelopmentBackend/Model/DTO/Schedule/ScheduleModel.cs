@@ -4,7 +4,7 @@ public class ScheduleModel
 {
     public List<DayModel> days { get; set; }
 
-    public ScheduleModel(IEnumerable<IGrouping<DateOnly, LessonDbModel>> daysWithLessons) 
+    public ScheduleModel(IEnumerable<IGrouping<int, LessonDbModel>> daysWithLessons) 
     {
         days = new List<DayModel>();
         foreach (var day in daysWithLessons)

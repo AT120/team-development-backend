@@ -32,8 +32,8 @@ public class ScheduleService : IScheduleService
             .Include(l => l.Subject)
             .Include(l => l.Room)
             .ThenInclude(r => r.Building)
-            .Where(l => l.Date >= monday && l.Date <= sunday)
-            .GroupBy(l => l.Date)
+            .Where(l => l.StartDate >= monday || l.EndDate < sunday)
+            .GroupBy(l => l.WeekDay)
             .ToListAsync() ?? throw new NullReferenceException(); // TODO: better exception
     
         ScheduleModel schedule = new(days);
