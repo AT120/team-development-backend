@@ -18,12 +18,14 @@ public class DefaultDBContext: DbContext
     }
     public async Task<bool> CheckIfCanBeAddedInDatabase(LessonDbModel model)
     {
+        
        var checker = await this.Lessons.Where(x => (x.TimeSlot == model.TimeSlot && 
         x.WeekDay == model.WeekDay && 
         model.StartDate < x.EndDate && 
         model.StartDate >= x.StartDate)
         && (x.TeacherId == model.TeacherId || x.GroupId == model.GroupId || x.RoomId == model.RoomId)).FirstOrDefaultAsync();
-        return checker != null;
+        Console.WriteLine(checker == null);
+        return checker == null;
     } 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

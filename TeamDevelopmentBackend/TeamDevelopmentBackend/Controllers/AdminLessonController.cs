@@ -16,7 +16,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(LessonDTOModel model)
+        public async Task<IActionResult> Post(LessonDTOModel model, DateTime date)
         {
             if (!ModelState.IsValid)
             {
@@ -30,15 +30,15 @@ namespace TeamDevelopmentBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Problem("", statusCode: 502);
+                return Problem(ex.Message, statusCode: 409);
             }
         }
-        [HttpDelete("{lessonId}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{lessonId}/{isOneTime}/{date}")]
+        public async Task<IActionResult> Delete(Guid id, bool isOneTime, DateTime date)
         {
             try
             {
-                await _lessonService.DeleteLesson(id);
+                await _lessonService.DeleteLesson(id, isOneTime,date);
                 return Ok();
             }
             catch (Exception ex)

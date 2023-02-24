@@ -33,7 +33,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Buildings");
+                    b.ToTable("Buildings", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.GroupDbModel", b =>
@@ -48,7 +48,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>
@@ -91,7 +91,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons");
+                    b.ToTable("Lessons", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.RoomDbModel", b =>
@@ -111,7 +111,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("BuildingId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.SubjectDbModel", b =>
@@ -120,16 +120,13 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.TeacherDbModel", b =>
@@ -144,7 +141,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Teachers", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.UserDbModel", b =>
@@ -171,7 +168,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>

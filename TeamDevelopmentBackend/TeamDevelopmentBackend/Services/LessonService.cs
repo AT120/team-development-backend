@@ -15,50 +15,98 @@ namespace TeamDevelopmentBackend.Services
 
         public async Task AddLesson(LessonDTOModel model)
         {
-            try
+            var lesson = new LessonDbModel
             {
-                _dbContext.Lessons.Add(new LessonDbModel
-                {
-                    Id = new Guid(),
-                    TimeSlot = model.TimeSlot,
-                    Date = DateOnly.FromDateTime(model.Date),
-                    TeacherId= model.TeacherId,
-                    RoomId= model.RoomId,
-                    GroupId= model.GroupId,
-                    SubjectId= model.SubjectId
-                });
+                Id = new Guid(),
+                TimeSlot = model.TimeSlot,
+                StartDate = DateOnly.FromDateTime(model.Date),
+                TeacherId = model.TeacherId,
+                RoomId = model.RoomId,
+                GroupId = model.GroupId,
+                SubjectId = model.SubjectId,
+                EndDate = model.IsOneTime == true ? DateOnly.FromDateTime(model.Date).AddDays(1) : DateOnly.MaxValue,
+                WeekDay = (int)DateOnly.FromDateTime(model.Date).DayOfWeek
+            };
+            if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
+            {
+                await _dbContext.Lessons.AddAsync(lesson);
                 await _dbContext.SaveChangesAsync();
             }
-            catch
+            else
             {
-                throw new Exception("Wrong data in model!");
+                throw new Exception("There is already lesson on this slot!");
             }
         }
 
-        public async Task DeleteLesson(Guid lessonId)
+        public async Task DeleteLesson(Guid lessonId, bool isOneTime, DateTime date)
         {
             try
             {
                 var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);
-                _dbContext.Lessons.Remove(lesson);
-                await _dbContext.SaveChangesAsync();
+
+                if (isOneTime)
+                {
+                    lesson.EndDate = DateOnly.FromDateTime(date.AddDays(-1));
+                   await _dbContext.Lessons.AddAsync(new LessonDbModel
+                    {
+                        Id = new Guid(),
+                        GroupId = lesson.GroupId,
+                        SubjectId = lesson.SubjectId,
+                        RoomId = lesson.RoomId,
+                        WeekDay = lesson.WeekDay,
+                        TimeSlot = lesson.TimeSlot,
+                        TeacherId = lesson.TeacherId,
+                        StartDate = DateOnly.FromDateTime(date.AddDays(7)),
+                        EndDate = lesson.EndDate
+                    });
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+
+                    lesson.EndDate = DateOnly.FromDateTime(date.AddDays(-1));
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            catch
+            {
+                throw new Exception("There is no lesson with this ID!");
+            }
+
+        }
+
+        public async Task EditLesson(Guid lessonId, LessonDTOModel model, DateTime date)
+        {
+            try
+            {
+                var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);
+                lesson.EndDate = DateOnly.FromDateTime(date);
+                var newLesson = new LessonDbModel
+                {
+                    Id = new Guid(),
+                    GroupId = model.GroupId,
+                    SubjectId = model.SubjectId,
+                    RoomId = model.RoomId,
+                    WeekDay = (int)DateOnly.FromDateTime(model.Date).DayOfWeek,
+                    TimeSlot = model.TimeSlot,
+                    TeacherId = model.TeacherId,
+                    StartDate = DateOnly.FromDateTime(model.Date),
+                    EndDate = model.IsOneTime == true ? DateOnly.FromDateTime(model.Date).AddDays(1) : DateOnly.MaxValue,
+                };
+
+                if(await _dbContext.CheckIfCanBeAddedInDatabase(newLesson))
+                {
+                    await _dbContext.AddAsync(newLesson);
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("There is already lesson on this slot!");
+                }
             }
             catch 
             {
                 throw new Exception("There is no lesson with this ID!");
-            }
-        }
-
-        public async Task EditLesson(Guid lessonId, LessonDTOModel model)
-        {
-            try
-            {
-                var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);
-                
-            }
-            catch 
-            {
-
             } 
         }
     }
