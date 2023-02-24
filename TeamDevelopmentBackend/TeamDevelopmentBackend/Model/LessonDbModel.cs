@@ -11,6 +11,7 @@ namespace TeamDevelopmentBackend.Model
         public Guid RoomId { get; set; }
         public RoomDbModel Room { get; set; }
 
+        public Guid SubjectId { get; set; }
         public SubjectDbModel Subject { get; set; }
       
         public Guid TeacherId { get; set; }

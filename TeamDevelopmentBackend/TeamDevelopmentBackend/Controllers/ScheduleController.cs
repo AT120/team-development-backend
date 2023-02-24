@@ -16,14 +16,21 @@ public class ScheduleController : ControllerBase
      } 
 
      [HttpGet("{date}")]
-     public async Task<IActionResult> GetSchedule(DateTime date)
-     {
-          
+     public async Task<IActionResult> GetSchedule(DateTime date,
+                                                  Guid? roomID,
+                                                  Guid? groupID,
+                                                  Guid? teacherID,
+                                                  Guid? subjectID)
+     {    
           try
           {
-
-               ScheduleModel schedule = 
-                    await _scheduleService.GetWeeklySchedule(DateOnly.FromDateTime(date));
+               ScheduleModel schedule = await _scheduleService.GetWeeklySchedule(
+                    DateOnly.FromDateTime(date),
+                    roomID,
+                    groupID,
+                    teacherID,
+                    subjectID
+               );
                return new JsonResult(schedule);
           }
           catch
@@ -32,5 +39,7 @@ public class ScheduleController : ControllerBase
           }
 
      }
+
+
     
 }
