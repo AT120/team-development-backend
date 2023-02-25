@@ -12,10 +12,12 @@ public class DefaultDBContext: DbContext
     public DbSet<RoomDbModel> Rooms { get; set; }
     public DbSet<TeacherDbModel> Teachers { get; set; }
     public DbSet<UserDbModel> Users { get; set; }
+    
     public DefaultDBContext(DbContextOptions<DefaultDBContext> options): base(options)
     {
       //  Database.EnsureCreated();
     }
+    
     public async Task<bool> CheckIfCanBeAddedInDatabase(LessonDbModel model)
     {
        var checker = await this.Lessons.Where(x => (x.TimeSlot == model.TimeSlot && 
@@ -25,9 +27,12 @@ public class DefaultDBContext: DbContext
         && (x.TeacherId == model.TeacherId || x.GroupId == model.GroupId || x.RoomId == model.RoomId)).FirstOrDefaultAsync();
         return checker != null;
     } 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+        modelBuilder.Entity<LessonDbModel>().Property(l => l.EndDate).HasDefaultValue(endDateDefault);
     }
+
+    private readonly DateOnly endDateDefault = new(9999, 12, 31);
 
 }
