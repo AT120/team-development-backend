@@ -8,9 +8,10 @@ public class DayModel
     public DateOnly date { get; set; }
     public int dayOfTheWeek { get; set; }
 
-    public DayModel(IGrouping<int, LessonDbModel> lessons) 
+    public DayModel(IGrouping<int, LessonDbModel> lessons, DateOnly date) 
     {
-        dayOfTheWeek = lessons.Key; //TODO: воскресенье = 0
+        this.date = date;
+        this.dayOfTheWeek = lessons.Key;
         this.lessons = new List<LessonDTOModel>();
         foreach (var lesson in lessons)
         {
