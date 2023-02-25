@@ -39,7 +39,7 @@ namespace TeamDevelopmentBackend.Services
             }
             else
             {
-                throw new Exception("There is already lesson on this slot!");
+                throw new InvalidOperationException("There is already lesson on this slot!");
             }
         }
 
@@ -65,7 +65,7 @@ namespace TeamDevelopmentBackend.Services
             var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);          
             if (lesson == null)
             {
-                throw new Exception("There is no lesson with this ID!");
+                throw new RankException("There is no lesson with this ID!"); //TODO: change RankException
             }
             else {
                 var newLesson = new LessonDbModel
@@ -95,7 +95,7 @@ namespace TeamDevelopmentBackend.Services
                 {
                     _dbContext.Lessons.Add(lesson);
                     await _dbContext.SaveChangesAsync();
-                    throw new Exception("There is already lesson on this slot!");
+                    throw new InvalidOperationException("There is already lesson on this slot!");
                 }
             }
         }

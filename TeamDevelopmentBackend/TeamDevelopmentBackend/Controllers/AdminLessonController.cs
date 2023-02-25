@@ -28,9 +28,13 @@ namespace TeamDevelopmentBackend.Controllers
                 await _lessonService.AddLesson(model);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
                 return Problem(ex.Message, statusCode: 409);
+            }
+            catch(ArgumentException ex) 
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
         [HttpPut("{lessonId}")]
@@ -46,9 +50,17 @@ namespace TeamDevelopmentBackend.Controllers
                 await _lessonService.EditLesson(lessonId, model);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (RankException ex)
             {
-                return Problem(ex.Message, statusCode: 409);
+                return Problem(ex.Message, statusCode: 404);
+            }
+            catch(ArgumentException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode:409);
             }
         }
 
