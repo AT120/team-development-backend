@@ -40,9 +40,9 @@ public class ScheduleService : IScheduleService
     {
         Expression[] conditions = new Expression[4];
         conditions[0] = GetExpression(roomID, nameof(LessonDbModel.RoomId));
-        conditions[1] = GetExpression(roomID, nameof(LessonDbModel.GroupId));
-        conditions[2] = GetExpression(roomID, nameof(LessonDbModel.TeacherId));
-        conditions[3] = GetExpression(roomID, nameof(LessonDbModel.SubjectId));
+        conditions[1] = GetExpression(groupID, nameof(LessonDbModel.GroupId));
+        conditions[2] = GetExpression(teacherID, nameof(LessonDbModel.TeacherId));
+        conditions[3] = GetExpression(subjectID, nameof(LessonDbModel.SubjectId));
 
         Expression conjunction = conditions[0];
         for (int i = 1; i < conditions.Length; i++)
@@ -82,12 +82,12 @@ public class ScheduleService : IScheduleService
             .Include(l => l.Subject)
             .Include(l => l.Room)
             .ThenInclude(r => r.Building)
-            // .Where(l => l.StartDate >= monday || l.EndDate < sunday)
+            .Where(l => sunday >= l.StartDate && monday < l.EndDate)
             .Where(filter)
             .GroupBy(l => l.WeekDay)
             .ToListAsync() ?? throw new NullReferenceException(); // TODO: better exception
     
-        ScheduleModel schedule = new(days);
+        ScheduleModel schedule = new(days, monday);
         return schedule;
     }
 
