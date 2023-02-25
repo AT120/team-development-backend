@@ -15,8 +15,8 @@ namespace TeamDevelopmentBackend.Controllers
             _lessonService = lessonService;
         }
 
-        [HttpPost("{date}")]
-        public async Task<IActionResult> Post(LessonDTOModel model, DateTime date)
+        [HttpPost]
+        public async Task<IActionResult> Post(LessonDTOModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -33,8 +33,8 @@ namespace TeamDevelopmentBackend.Controllers
                 return Problem(ex.Message, statusCode: 409);
             }
         }
-        [HttpPut("{lessonId}/{date}")]
-        public async Task<IActionResult> Put(Guid lessonId, LessonDTOModel model, DateTime date)
+        [HttpPut("{lessonId}")]
+        public async Task<IActionResult> Put(Guid lessonId, LessonEditDTOModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace TeamDevelopmentBackend.Controllers
 
             try
             {
-                await _lessonService.EditLesson(lessonId, model, date);
+                await _lessonService.EditLesson(lessonId, model);
                 return Ok();
             }
             catch (Exception ex)
@@ -52,12 +52,12 @@ namespace TeamDevelopmentBackend.Controllers
             }
         }
 
-        [HttpDelete("{lessonId}/{isOneTime}/{date}")]
-        public async Task<IActionResult> Delete(Guid id, bool isOneTime, DateTime date)
+        [HttpDelete("{lessonId}")]
+        public async Task<IActionResult> Delete(Guid lessonId)
         {
             try
             {
-                await _lessonService.DeleteLesson(id, isOneTime,date);
+                await _lessonService.DeleteLesson(lessonId);
                 return Ok();
             }
             catch (Exception ex)

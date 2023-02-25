@@ -2,9 +2,9 @@
 {
     public class LessonDTOModel
     {
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int TimeSlot { get; set; }
-        public bool IsOneTime { get; set; }
         public Guid TeacherId { get; set; }
         public Guid RoomId { get; set; }
         public Guid GroupId { get; set; }
