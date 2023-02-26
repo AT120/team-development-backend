@@ -11,6 +11,7 @@ namespace TeamDevelopmentBackend.Model
         public Guid RoomId { get; set; }
         public RoomDbModel Room { get; set; }
 
+        public Guid SubjectId { get; set; }
         public SubjectDbModel Subject { get; set; }
       
         public Guid TeacherId { get; set; }
@@ -19,7 +20,9 @@ namespace TeamDevelopmentBackend.Model
         public Guid GroupId { get; set; }
         public GroupDbModel Group { get; set; }
 
-        public DateOnly Date { get; set; } 
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public int WeekDay { get; set; }
 
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeamDevelopmentBackend.Migrations
 {
     [DbContext(typeof(DefaultDBContext))]
-    partial class DefaultDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230222113553_lessonChange")]
+    partial class lessonChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Buildings", (string)null);
+                    b.ToTable("Buildings");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.GroupDbModel", b =>
@@ -48,7 +51,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>
@@ -91,7 +94,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.RoomDbModel", b =>
@@ -111,7 +114,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("BuildingId");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.SubjectDbModel", b =>
@@ -126,7 +129,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.TeacherDbModel", b =>
@@ -141,7 +144,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers", (string)null);
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.UserDbModel", b =>
@@ -168,7 +171,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeamDevelopmentBackend.Migrations
 {
     [DbContext(typeof(DefaultDBContext))]
-    partial class DefaultDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230221070435_addSubjectId")]
+    partial class addSubjectId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Buildings", (string)null);
+                    b.ToTable("Buildings");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.GroupDbModel", b =>
@@ -48,7 +51,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>
@@ -57,7 +60,7 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("EndDate")
+                    b.Property<DateOnly>("Date")
                         .HasColumnType("date");
 
                     b.Property<Guid>("GroupId")
@@ -66,9 +69,6 @@ namespace TeamDevelopmentBackend.Migrations
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
 
@@ -76,9 +76,6 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("TimeSlot")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WeekDay")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -91,7 +88,16 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.HasIndex("TimeSlot", "Date", "GroupId")
+                        .IsUnique();
+
+                    b.HasIndex("TimeSlot", "Date", "RoomId")
+                        .IsUnique();
+
+                    b.HasIndex("TimeSlot", "Date", "TeacherId")
+                        .IsUnique();
+
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.RoomDbModel", b =>
@@ -111,7 +117,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("BuildingId");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.SubjectDbModel", b =>
@@ -120,13 +126,16 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.TeacherDbModel", b =>
@@ -141,7 +150,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Teachers", (string)null);
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.UserDbModel", b =>
@@ -168,7 +177,7 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>
