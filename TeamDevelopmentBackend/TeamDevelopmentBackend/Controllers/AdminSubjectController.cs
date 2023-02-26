@@ -29,11 +29,11 @@ namespace TeamDevelopmentBackend.Controllers
             }
         }
         [HttpDelete("{subjectId}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid subjectId)
         {
             try
             {
-                await _subjectService.DeleteSubject(id);
+                await _subjectService.DeleteSubject(subjectId);
                 return Ok();   
             }
             catch(Exception ex) 
