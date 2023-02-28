@@ -70,7 +70,7 @@ namespace TeamDevelopmentBackend.Services
             else {
                 var newLesson = new LessonDbModel
                 {
-                    Id = lessonId,
+                    Id = new Guid(),
                     StartDate = model.StartDate == null ? lesson.StartDate : DateOnly.FromDateTime((DateTime)model.StartDate),
                     TimeSlot = model.TimeSlot == null ? lesson.TimeSlot : (int)model.TimeSlot,
                     TeacherId = model.TeacherId == null ? lesson.TeacherId : (Guid)model.TeacherId,
@@ -88,8 +88,18 @@ namespace TeamDevelopmentBackend.Services
                 await _dbContext.SaveChangesAsync();
                 if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
                 {
-                    _dbContext.Lessons.Add(newLesson);
+                    if (lesson.StartDate < DateOnly.FromDateTime(DateTime.Now).AddDays(-1))
+                    {
+                        lesson.EndDate = DateOnly.FromDateTime(DateTime.Now);
+                        newLesson.StartDate = DateOnly.FromDateTime(DateTime.Now);                        
+                        _dbContext.Lessons.Add(lesson);
+                    }
+                    if (newLesson.EndDate > newLesson.StartDate)
+                    {
+                        _dbContext.Lessons.Add(newLesson);
+                    }
                     await _dbContext.SaveChangesAsync();
+                    
                 }
                 else
                 {
