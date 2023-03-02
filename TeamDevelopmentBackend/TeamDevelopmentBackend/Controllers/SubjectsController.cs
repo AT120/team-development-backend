@@ -1,26 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers
 {
-    [Route("api/subject")]
+    [Route("api/subjects")]
     [ApiController]
-    public class AdminSubjectController : ControllerBase
+    public class SubjectsController : ControllerBase
     {
-        private ISubjectService _subjectService;
-        public AdminSubjectController(ISubjectService subjectService) 
+        private readonly ISubjectService _subjectService;
+        public SubjectsController(ISubjectService subjectService)
         {
-            _subjectService= subjectService;
+            _subjectService = subjectService;
         }
-        [HttpPost("{name}")]
-        public async Task<IActionResult> Post(string name)
-        {
 
+
+        [HttpGet]
+        public ActionResult<ICollection<SubjectDbModel>> GetSubjectsList()
+        {
+            return Problem("This method has not been yet implemented", statusCode: 501); 
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Post(NameModel subject)
+        {
             try
             {
-                await _subjectService.AddSubject(name);
+                await _subjectService.AddSubject(subject.Name);
                 return Ok();
             }
             catch (Exception ex)
@@ -28,15 +37,17 @@ namespace TeamDevelopmentBackend.Controllers
                 return Problem(ex.Message, statusCode: 409);
             }
         }
+
+
         [HttpDelete("{subjectId}")]
         public async Task<IActionResult> Delete(Guid subjectId)
         {
             try
             {
                 await _subjectService.DeleteSubject(subjectId);
-                return Ok();   
+                return Ok();
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 return Problem(ex.Message, statusCode: 404);
             }
