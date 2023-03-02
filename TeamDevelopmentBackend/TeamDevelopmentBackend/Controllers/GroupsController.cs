@@ -4,19 +4,26 @@ using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers
 {
-    [Route("api/group")]
+    [Route("api/groups")]
     [ApiController]
-    public class AdminGroupController : ControllerBase
+    public class GroupsController : ControllerBase
     {
-        private IGroupService _groupService;
-        public AdminGroupController(IGroupService groupService)
+        private readonly IGroupService _groupService;
+        public GroupsController(IGroupService groupService)
         {
             _groupService = groupService;
         }
-        [HttpPost("{name}")]
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            //TODO:
+            return Ok();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Post(string name)
         {
-
             try
             {
                 await _groupService.AddGroup(name);
@@ -27,6 +34,7 @@ namespace TeamDevelopmentBackend.Controllers
                 return Problem("", statusCode: 502);
             }
         }
+
         [HttpDelete("{groupId}")]
         public async Task<IActionResult> Delete(Guid id)
         {
