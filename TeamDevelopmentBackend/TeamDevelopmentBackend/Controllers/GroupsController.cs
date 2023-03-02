@@ -22,7 +22,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(string name)
+        public async Task<IActionResult> Post(string name) //TODO: wrap name in model
         {
             try
             {
