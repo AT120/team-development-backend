@@ -1,16 +1,19 @@
+using System.Text.Json.Serialization;
+
 namespace TeamDevelopmentBackend.Model.DTO.Schedule;
 
 public class ScheduleModel
 {
-    public List<DayModel> days { get; set; }
+    [JsonPropertyName("days")]
+    public List<DayModel> Days { get; set; }
 
     public ScheduleModel(IEnumerable<IGrouping<int, LessonDbModel>> daysWithLessons, DateOnly monday) 
     {
-        days = new List<DayModel>();
+        Days = new List<DayModel>();
         foreach (var day in daysWithLessons)
         {
             DateOnly date = monday.AddDays(day.Key - 1);  //TODO: sunday 
-            days.Add(new DayModel(day, date));
+            Days.Add(new DayModel(day, date));
         }
     } 
 }
