@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Collections;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers
@@ -15,10 +17,9 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public ActionResult<ICollection<GroupDbModel>> Get()
         {
-            //TODO:
-            return Ok();
+            return Problem("This method has not been yet implemented", statusCode: 501); 
         }
 
         [HttpPost]
