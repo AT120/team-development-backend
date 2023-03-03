@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
@@ -25,6 +26,7 @@ namespace TeamDevelopmentBackend.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(NameModel subject)
         {
             try
@@ -40,6 +42,7 @@ namespace TeamDevelopmentBackend.Controllers
 
 
         [HttpDelete("{subjectId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid subjectId)
         {
             try

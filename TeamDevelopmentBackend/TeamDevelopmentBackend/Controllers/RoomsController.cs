@@ -23,6 +23,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
+    [Authorize]
     public ActionResult DeleteRoom(Guid roomId)
     {
         return Problem("This method has not been yet implemented", statusCode: 501); 

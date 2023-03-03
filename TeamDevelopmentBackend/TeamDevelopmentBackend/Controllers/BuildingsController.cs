@@ -23,6 +23,7 @@ public class BuildingsController : ControllerBase
     }
 
     [HttpDelete("{buildingId}")]
+    [Authorize]
     public ActionResult DeleteBuilding(Guid buildingId)
     {
         return Problem("This method has not been yet implemented", statusCode: 501); 

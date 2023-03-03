@@ -7,7 +7,6 @@ namespace TeamDevelopmentBackend.Model.DTO.User
     {
         [Required]
         [EmailAddress]
-        [JsonPropertyName("login")]
         public string Login { get; set; }
     }
 }

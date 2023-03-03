@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Model.DTO.Schedule;
@@ -22,11 +23,12 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpGet("{date}")]
-        public async Task<IActionResult> GetSchedule(DateTime date,
-                                                     Guid? roomID,
-                                                     Guid? groupID,
-                                                     Guid? teacherID,
-                                                     Guid? subjectID)
+        public async Task<ActionResult<ScheduleModel>> GetSchedule(DateTime date,
+                                                                   Guid? roomID,
+                                                                   Guid? groupID,
+                                                                   Guid? teacherID,
+                                                                   Guid? subjectID)
+            
         {
             try
             {
@@ -37,7 +39,7 @@ namespace TeamDevelopmentBackend.Controllers
                         teacherID,
                         subjectID
                 );
-                return new JsonResult(schedule);
+                return schedule;
             }
             catch
             {
@@ -48,6 +50,7 @@ namespace TeamDevelopmentBackend.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(LessonDTOModel model)
         {
             if (!ModelState.IsValid)
@@ -71,6 +74,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPut("{lessonId}")]
+        [Authorize]
         public async Task<IActionResult> Put(Guid lessonId, LessonEditDTOModel model)
         {
             if (!ModelState.IsValid)
@@ -98,6 +102,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpDelete("{lessonId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid lessonId)
         {
             try

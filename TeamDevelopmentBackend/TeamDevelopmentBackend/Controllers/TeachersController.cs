@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Services;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TeamDevelopmentBackend.Controllers
 {
@@ -23,6 +24,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(NameModel teacher)
         {
             try
@@ -37,6 +39,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpDelete("{subjectId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid subjectId)
         {
             try

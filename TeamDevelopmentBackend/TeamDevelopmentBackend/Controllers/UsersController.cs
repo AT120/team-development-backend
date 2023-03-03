@@ -33,6 +33,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost("{role}")]
+        [Authorize]
         public async Task<IActionResult> Put(Role role, LoginDTOModel model)
         {
             if (!ModelState.IsValid)

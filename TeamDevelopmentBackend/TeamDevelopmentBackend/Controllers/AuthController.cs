@@ -29,8 +29,9 @@ public class AuthController : ControllerBase
         return Problem("This method has not been yet implemented", statusCode: 501); 
     }
 
-    [HttpGet("refresh")] //TODO: authorize?
-    public ActionResult<TokenPairModel> Refresh(RefreshTokenModel token)
+    [HttpGet("refresh")]
+    [Authorize]
+    public ActionResult<TokenPairModel> Refresh()
     {
         return Problem("This method has not been yet implemented", statusCode: 501); 
     }

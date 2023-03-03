@@ -6,6 +6,5 @@ namespace TeamDevelopmentBackend.Model.DTO;
 public class NameModel
 {
     [Required]
-    [JsonPropertyName("name")]
     public string Name { get; set; }
 }

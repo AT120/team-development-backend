@@ -4,7 +4,6 @@ namespace TeamDevelopmentBackend.Model.DTO.Schedule;
 
 public class ScheduleModel
 {
-    [JsonPropertyName("days")]
     public List<DayModel> Days { get; set; }
 
     public ScheduleModel(IEnumerable<IGrouping<int, LessonDbModel>> daysWithLessons, DateOnly monday) 

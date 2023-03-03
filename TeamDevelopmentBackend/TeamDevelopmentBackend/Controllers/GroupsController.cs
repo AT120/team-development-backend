@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
@@ -23,6 +24,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(string name) //TODO: wrap name in model
         {
             try
@@ -37,11 +39,12 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpDelete("{groupId}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [Authorize]
+        public async Task<IActionResult> Delete(Guid groupId)
         {
             try
             {
-                await _groupService.DeleteGroup(id);
+                await _groupService.DeleteGroup(groupId);
                 return Ok();
             }
             catch (Exception ex)
