@@ -9,6 +9,10 @@ namespace TeamDevelopmentBackend.Services
         {
             _dbContext = dbContext;
         }
+        public SubjectDbModel[] GetSubjects()
+        {
+            return _dbContext.Subjects.Select(x => new SubjectDbModel()).ToArray();
+        }
         public async Task AddSubject(string name)
         {
             try
