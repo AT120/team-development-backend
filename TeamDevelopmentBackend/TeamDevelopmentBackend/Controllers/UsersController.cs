@@ -33,8 +33,8 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost("{role}")]
-        [Authorize]
-        public async Task<IActionResult> Put(Role role, LoginDTOModel model)
+      //  [Authorize]
+        public async Task<IActionResult> Put(Role role, LoginDTOModel model,Guid? teacherId)
         {
             if (!ModelState.IsValid)
             {
@@ -42,7 +42,7 @@ namespace TeamDevelopmentBackend.Controllers
             }
             try
             {
-                await _userService.GiveUserARole(model, role);
+                await _userService.GiveUserARole(model, role,teacherId);
                 return Ok();
             }
             catch (ArgumentException ex)
