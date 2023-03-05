@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace TeamDevelopmentBackend.Model.DTO
+namespace TeamDevelopmentBackend.Model.DTO.User
 {
     public class LoginDTOModel
     {

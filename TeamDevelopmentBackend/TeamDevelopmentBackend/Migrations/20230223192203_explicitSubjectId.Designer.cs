@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeamDevelopmentBackend.Migrations
 {
     [DbContext(typeof(DefaultDBContext))]
-    partial class DefaultDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230223192203_explicitSubjectId")]
+    partial class explicitSubjectId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,9 +61,7 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly>("EndDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(9999, 12, 31));
+                        .HasColumnType("date");
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
@@ -122,7 +123,7 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
 

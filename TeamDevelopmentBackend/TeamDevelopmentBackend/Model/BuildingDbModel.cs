@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; } 
         public string Name { get; set; }
-        public RoomDbModel[] Rooms { get; set; }
+        public ICollection<RoomDbModel> Rooms { get; set; }
     }
 }

@@ -1,21 +1,56 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model.DTO;
+using TeamDevelopmentBackend.Model.DTO.Schedule;
 using TeamDevelopmentBackend.Services;
+
 
 namespace TeamDevelopmentBackend.Controllers
 {
-    [Route("api/lesson")]
+    [Route("api/lessons")]
     [ApiController]
-    public class AdminLessonController : ControllerBase
+    public class LessonsController : ControllerBase
     {
-        private ILessonService _lessonService;
-        public AdminLessonController(ILessonService lessonService)
+        private readonly ILessonService _lessonService;
+        private readonly IScheduleService _scheduleService;
+
+        public LessonsController(ILessonService lessonService,
+                                 IScheduleService scheduleService)
         {
             _lessonService = lessonService;
+            _scheduleService = scheduleService;
         }
 
+        [HttpGet("{date}")]
+        public async Task<ActionResult<ScheduleModel>> GetSchedule(DateTime date,
+                                                                   Guid? roomID,
+                                                                   Guid? groupID,
+                                                                   Guid? teacherID,
+                                                                   Guid? subjectID)
+            
+        {
+            try
+            {
+                ScheduleModel schedule = await _scheduleService.GetWeeklySchedule(
+                        DateOnly.FromDateTime(date),
+                        roomID,
+                        groupID,
+                        teacherID,
+                        subjectID
+                );
+                return schedule;
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+
+        }
+
+
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post(LessonDTOModel model)
         {
             if (!ModelState.IsValid)
@@ -32,12 +67,14 @@ namespace TeamDevelopmentBackend.Controllers
             {
                 return Problem(ex.Message, statusCode: 409);
             }
-            catch(ArgumentException ex) 
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 400);
             }
         }
+
         [HttpPut("{lessonId}")]
+        [Authorize]
         public async Task<IActionResult> Put(Guid lessonId, LessonEditDTOModel model)
         {
             if (!ModelState.IsValid)
@@ -54,17 +91,18 @@ namespace TeamDevelopmentBackend.Controllers
             {
                 return Problem(ex.Message, statusCode: 404);
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 400);
             }
             catch (InvalidOperationException ex)
             {
-                return Problem(ex.Message, statusCode:409);
+                return Problem(ex.Message, statusCode: 409);
             }
         }
 
         [HttpDelete("{lessonId}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid lessonId)
         {
             try

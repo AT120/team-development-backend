@@ -4,3 +4,4 @@ TeamDevelopmentBackend/TeamDevelopmentBackend/obj
 *.vs
 TeamDevelopmentBackend/TeamDevelopmentBackend/appsettings.*.json
 TeamDevelopmentBackend/TeamDevelopmentBackend/Properties
+*.idea

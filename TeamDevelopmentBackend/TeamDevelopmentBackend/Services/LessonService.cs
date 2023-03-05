@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
 
@@ -29,7 +29,7 @@ namespace TeamDevelopmentBackend.Services
                 RoomId = model.RoomId,
                 GroupId = model.GroupId,
                 SubjectId = model.SubjectId,
-                EndDate =  model.EndDate==null ? DateOnly.MaxValue : DateOnly.FromDateTime((DateTime)model.EndDate).AddDays(1),
+                EndDate = model.EndDate == null ? DateOnly.MaxValue : DateOnly.FromDateTime((DateTime)model.EndDate).AddDays(1),
                 WeekDay = (int)DateOnly.FromDateTime(model.StartDate).DayOfWeek
             };
             if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
@@ -55,22 +55,23 @@ namespace TeamDevelopmentBackend.Services
             if (lesson.EndDate <= lesson.StartDate)
             {
                 _dbContext.Lessons.Remove(lesson);
-            }       
+            }
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task EditLesson(Guid lessonId, LessonEditDTOModel model)
         {
 
-            var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);          
+            var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);
             if (lesson == null)
             {
                 throw new RankException("There is no lesson with this ID!"); //TODO: change RankException
             }
-            else {
+            else
+            {
                 var newLesson = new LessonDbModel
                 {
-                    Id = lessonId,
+                    Id = new Guid(),
                     StartDate = model.StartDate == null ? lesson.StartDate : DateOnly.FromDateTime((DateTime)model.StartDate),
                     TimeSlot = model.TimeSlot == null ? lesson.TimeSlot : (int)model.TimeSlot,
                     TeacherId = model.TeacherId == null ? lesson.TeacherId : (Guid)model.TeacherId,
@@ -88,8 +89,18 @@ namespace TeamDevelopmentBackend.Services
                 await _dbContext.SaveChangesAsync();
                 if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
                 {
-                    _dbContext.Lessons.Add(newLesson);
+                    if (lesson.StartDate < DateOnly.FromDateTime(DateTime.Now).AddDays(-1))
+                    {
+                        lesson.EndDate = DateOnly.FromDateTime(DateTime.Now);
+                        newLesson.StartDate = DateOnly.FromDateTime(DateTime.Now);
+                        _dbContext.Lessons.Add(lesson);
+                    }
+                    if (newLesson.EndDate > newLesson.StartDate)
+                    {
+                        _dbContext.Lessons.Add(newLesson);
+                    }
                     await _dbContext.SaveChangesAsync();
+
                 }
                 else
                 {

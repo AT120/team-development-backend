@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeamDevelopmentBackend.Migrations
 {
     [DbContext(typeof(DefaultDBContext))]
-    partial class DefaultDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230220185629_arrayFix")]
+    partial class arrayFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,19 +60,14 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("EndDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValue(new DateOnly(9999, 12, 31));
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uuid");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
 
                     b.Property<Guid>("SubjectId")
                         .HasColumnType("uuid");
@@ -78,9 +76,6 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("TimeSlot")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WeekDay")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -92,6 +87,15 @@ namespace TeamDevelopmentBackend.Migrations
                     b.HasIndex("SubjectId");
 
                     b.HasIndex("TeacherId");
+
+                    b.HasIndex("TimeSlot", "Date", "GroupId")
+                        .IsUnique();
+
+                    b.HasIndex("TimeSlot", "Date", "RoomId")
+                        .IsUnique();
+
+                    b.HasIndex("TimeSlot", "Date", "TeacherId")
+                        .IsUnique();
 
                     b.ToTable("Lessons");
                 });
@@ -122,7 +126,7 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("text");
 
