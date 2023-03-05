@@ -1,4 +1,4 @@
-﻿namespace TeamDevelopmentBackend.Services
+﻿namespace TeamDevelopmentBackend.Services.Interfaces
 {
     public interface ITeacherService
     {

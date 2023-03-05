@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Model.DTO.Schedule;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 
 namespace TeamDevelopmentBackend.Controllers

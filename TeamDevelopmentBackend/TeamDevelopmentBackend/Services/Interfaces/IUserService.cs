@@ -1,7 +1,7 @@
 ﻿using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.User;
 
-namespace TeamDevelopmentBackend.Services
+namespace TeamDevelopmentBackend.Services.Interfaces
 {
     public interface IUserService
     {

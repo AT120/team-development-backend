@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TeamDevelopmentBackend.Model;
+﻿using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Services
 {
