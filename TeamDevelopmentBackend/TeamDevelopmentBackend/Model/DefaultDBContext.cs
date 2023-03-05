@@ -12,7 +12,9 @@ public class DefaultDBContext: DbContext
     public DbSet<RoomDbModel> Rooms { get; set; }
     public DbSet<TeacherDbModel> Teachers { get; set; }
     public DbSet<UserDbModel> Users { get; set; }
-    
+    public DbSet<IssuedTokenDbModel> IssuedTokens { get; set; }
+    public DbSet<CounterStorageDbModel> Counter { get; set; }
+
     public DefaultDBContext(DbContextOptions<DefaultDBContext> options): base(options)
     {
       //  Database.EnsureCreated();
@@ -21,11 +23,14 @@ public class DefaultDBContext: DbContext
     public async Task<bool> CheckIfCanBeAddedInDatabase(LessonDbModel model)
     {
         
-       var checker = await this.Lessons.Where(x => (x.TimeSlot == model.TimeSlot && 
-        x.WeekDay == model.WeekDay && 
-        model.StartDate < x.EndDate && 
-        model.StartDate >= x.StartDate)
-        && (x.TeacherId == model.TeacherId || x.GroupId == model.GroupId || x.RoomId == model.RoomId)).FirstOrDefaultAsync();
+        var checker = await this.Lessons.Where(x => 
+            x.TimeSlot == model.TimeSlot && 
+            x.WeekDay == model.WeekDay && 
+            model.StartDate < x.EndDate && 
+            model.StartDate >= x.StartDate &&
+            (x.TeacherId == model.TeacherId || x.GroupId == model.GroupId || x.RoomId == model.RoomId)
+        ).FirstOrDefaultAsync();
+        
         Console.WriteLine(checker == null);
         return checker == null;
     } 
@@ -33,6 +38,7 @@ public class DefaultDBContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<LessonDbModel>().Property(l => l.EndDate).HasDefaultValue(endDateDefault);
+        modelBuilder.Entity<UserDbModel>().HasIndex(u => u.Login).IsUnique();
     }
 
     private readonly DateOnly endDateDefault = new(9999, 12, 31);
