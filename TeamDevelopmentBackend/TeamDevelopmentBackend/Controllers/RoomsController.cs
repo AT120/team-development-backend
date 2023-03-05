@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model.DTO;
+using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers;
 
@@ -9,6 +10,11 @@ namespace TeamDevelopmentBackend.Controllers;
 [Route("api/buildings/{buildingId}/rooms")]
 public class RoomsController : ControllerBase
 {
+    private readonly IRoomService _roomService;
+    public RoomsController(IRoomService roomService)
+    {
+        _roomService = roomService;
+    }
     [HttpGet]
     public ActionResult<ICollection<BuildingDTOModel>> GetRooms(Guid buildingId)
     {
@@ -16,16 +22,32 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
-    public ActionResult CreateRoom(NameModel room)
+    //[Authorize]
+    public async Task<IActionResult> CreateRoom(Guid buildingId,NameModel room)
     {
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        try
+        {
+            await _roomService.AddRoom(room,buildingId);
+            return Ok();
+        }
+        catch(Exception ex)
+        {
+            return Problem(ex.Message, statusCode: 404);
+        }
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
-    [Authorize]
-    public ActionResult DeleteRoom(Guid roomId)
+    //[Authorize]
+    public async Task<IActionResult> DeleteRoom(Guid roomId)
     {
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        try
+        {
+            await _roomService.RemoveRoom(roomId);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return Problem(ex.Message, statusCode: 404);
+        }
     }
 }
