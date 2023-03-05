@@ -20,7 +20,7 @@ namespace TeamDevelopmentBackend.Controllers
         [HttpGet]
         public ActionResult<ICollection<TeacherDbModel>> GetTeachersList()
         {
-            return Problem("This method has not been yet implemented", statusCode: 501); 
+            return _teacherService.GetTeachers();
         }
 
         [HttpPost]

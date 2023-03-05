@@ -10,6 +10,10 @@ namespace TeamDevelopmentBackend.Services
         {
             _dbContext = dbContext;
         }
+        public TeacherDbModel[] GetTeachers()
+        {
+            return _dbContext.Teachers.Select(x => new TeacherDbModel()).ToArray();
+        }
         public async Task AddTeacher(string name)
         {
                 _dbContext.Teachers.Add(new TeacherDbModel { Id = new Guid(), Name = name });
