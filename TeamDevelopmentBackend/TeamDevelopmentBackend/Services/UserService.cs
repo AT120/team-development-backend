@@ -1,5 +1,6 @@
 ﻿using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.User;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Services
 {

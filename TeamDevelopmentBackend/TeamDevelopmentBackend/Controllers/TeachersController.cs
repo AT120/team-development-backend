@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TeamDevelopmentBackend.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using TeamDevelopmentBackend.Services.Interfaces;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Model;
 using Microsoft.AspNetCore.Authorization;

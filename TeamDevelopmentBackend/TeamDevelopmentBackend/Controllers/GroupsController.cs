@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Controllers
 {
