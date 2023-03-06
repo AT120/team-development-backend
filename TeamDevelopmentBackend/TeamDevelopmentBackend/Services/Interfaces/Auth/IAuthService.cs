@@ -1,6 +1,6 @@
 using TeamDevelopmentBackend.Model.DTO.Auth;
 
-namespace TeamDevelopmentBackend.Services.Interfaces;
+namespace TeamDevelopmentBackend.Services.Interfaces.Auth;
 
 public interface IAuthService
 {

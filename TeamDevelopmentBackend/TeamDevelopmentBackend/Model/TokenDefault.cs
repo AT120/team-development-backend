@@ -35,7 +35,7 @@ class TokenParameters
     }
 }
 
-class ClaimsDefault
+static class ClaimsDefault
 {
     public static readonly string UserId = "UserId";
     public static readonly string Role = "Role";
@@ -50,3 +50,9 @@ enum TokenType
     Access,
 }
 
+static class Policies
+{
+    public const string RefreshOnly = "RefreshOnly";
+    public const string Admin = "Admin";
+
+}

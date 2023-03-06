@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.Auth;
-using TeamDevelopmentBackend.Services.Interfaces;
+using TeamDevelopmentBackend.Services.Interfaces.Auth;
 
 namespace TeamDevelopmentBackend.Services;
 
@@ -28,7 +28,7 @@ public class AuthService : IAuthService
         var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Login == creds.Email)
             ?? throw new BackendException("Неверный логин или пароль", 401);
         
-        if (user.PasswordHash != Hash(creds.Password))
+        if (!user.PasswordHash.SequenceEqual(Hash(creds.Password)))
             throw new BackendException("Неверный логин или пароль", 401);
 
         return _tokenService.GetTokenPair(user);    
@@ -49,7 +49,7 @@ public class AuthService : IAuthService
         };
 
         await _dbcontext.Users.AddAsync(user);
-        await _dbcontext.SaveChangesAsync(); //FIX: catch unique constraint exception
+        await _dbcontext.SaveChangesAsync();
 
         return _tokenService.GetTokenPair(user);
     }

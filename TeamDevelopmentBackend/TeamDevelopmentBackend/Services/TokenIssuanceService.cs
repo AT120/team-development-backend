@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.Auth;
 using TeamDevelopmentBackend.Services.Interfaces;
+using TeamDevelopmentBackend.Services.Interfaces.Auth;
 
 namespace TeamDevelopmentBackend.Services;
 
@@ -29,6 +30,7 @@ public class TokenIssuanceService : ITokenIssuanceService
 
         Claim[] claims = {
             new Claim(ClaimsDefault.UserId, user.Id.ToString()),
+            new Claim(ClaimsDefault.Role, user.Role.ToString()),
             new Claim(ClaimsDefault.TokenId, tokenId.ToString()),
             new Claim(ClaimsDefault.IssuedByTokenId, IssuedByTokenId.ToString()),
             new Claim(ClaimsDefault.TokenType, type.ToString())
