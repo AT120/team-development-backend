@@ -5,35 +5,25 @@ namespace TeamDevelopmentBackend.Services;
 
 public class GlobalCounterService : IGlobalCounter<ulong>
 {
-    private ulong counter;
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly DefaultDBContext _dbcontext;
     
-    public GlobalCounterService(IServiceScopeFactory scopeFactory)
+    public GlobalCounterService(DefaultDBContext dbcontext)
     {
-        _scopeFactory = scopeFactory;
+        _dbcontext = dbcontext;
+    }
+
+    public ulong Next()
+    {
+        var counter = _dbcontext.Counter.FirstOrDefault();
+        if (counter is null)
+        {
+            counter = new CounterStorageDbModel { Id = 0, Last = 0 };
+            _dbcontext.Counter.Add(counter);
+        }
         
-        using(var scope = _scopeFactory.CreateScope())
-        {
-            var _dbcontext = scope.ServiceProvider.GetRequiredService<DefaultDBContext>();
-            counter = _dbcontext.Counter.FirstOrDefault()?.Last ?? 0UL;
-        }
+        counter.Last++;
+        _dbcontext.SaveChanges();
+        return counter.Last;
     }
-
-    ~GlobalCounterService()
-    {
-        using(var scope = _scopeFactory.CreateScope())
-        {
-            var _dbcontext = scope.ServiceProvider.GetRequiredService<DefaultDBContext>();
-            var storage = _dbcontext.Counter.FirstOrDefault();
-            if (storage is null)
-                _dbcontext.Counter.Add(new CounterStorageDbModel { Last = counter });
-            else
-                storage.Last = counter;
-
-            _dbcontext.SaveChanges();
-        }
-    }
-
-    public ulong Next() => ++counter;
 
 }
