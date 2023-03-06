@@ -20,7 +20,7 @@ namespace TeamDevelopmentBackend.Controllers
         [HttpGet]
         public ActionResult<ICollection<GroupDbModel>> Get()
         {
-            return Problem("This method has not been yet implemented", statusCode: 501); 
+            return _groupService.GetGroups(); 
         }
 
         [HttpPost]

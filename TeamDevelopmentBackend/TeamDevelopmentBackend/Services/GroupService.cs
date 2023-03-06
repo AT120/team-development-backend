@@ -28,5 +28,10 @@ namespace TeamDevelopmentBackend.Services
                 throw new Exception("There is no group with this ID!");
             }
         }
+
+        public GroupDbModel[] GetGroups()
+        {
+            return _dbContext.Groups.Select(x => new GroupDbModel()).ToArray();
+        }
     }
 }
