@@ -26,6 +26,13 @@ namespace TeamDevelopmentBackend.Services
             try
             {
                 _dbContext.Teachers.Remove(teacher);
+                var user = _dbContext.Users.FirstOrDefault(x=> x.Id == Id);
+                var lessons = _dbContext.Lessons.Where(x => x.TeacherId==Id && x.StartDate>=DateOnly.FromDateTime(DateTime.Now)).ToList();
+                lessons.ForEach(x => _dbContext.Remove(x));
+                if (user != null)
+                {
+                    user.Role = Role.Student;
+                }
                 await _dbContext.SaveChangesAsync();
             }
             catch
