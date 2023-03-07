@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -7,7 +8,7 @@ using TeamDevelopmentBackend.Filters;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Services;
 using TeamDevelopmentBackend.Services.Interfaces;
-
+using TeamDevelopmentBackend.Services.Interfaces.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 string connection = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new NullReferenceException("Specify connetction string in appsetings file!");
-builder.Services.AddDbContext<DefaultDBContext> (options => options.UseNpgsql(connection));
+builder.Services.AddDbContext<DefaultDBContext>(options => options.UseNpgsql(connection));
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
@@ -27,9 +28,13 @@ builder.Services.AddScoped<IBuildingService, BuildingService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddSingleton<IGlobalCounter<ulong>, GlobalCounterService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenIssuanceService, TokenIssuanceService>();
+builder.Services.AddScoped<IGlobalCounter<ulong>, GlobalCounterService>();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(option => {
+builder.Services.AddSwaggerGen(option =>
+{
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -46,8 +51,13 @@ builder.Services.AddSwaggerGen(option => {
 TokenParameters.Issuer = builder.Configuration["JwtSettings:ValidIssuer"]
     ?? throw new NullReferenceException("Specify valid issuer in appsetings file!");
 
-TokenParameters.Lifetime = Int32.Parse(
-    builder.Configuration["JwtSettings:Lifetime"] 
+TokenParameters.AccessLifetime = Int32.Parse(
+    builder.Configuration["JwtSettings:AccessLifetime"]
+        ?? throw new NullReferenceException("Specify lifetime of token in appsetings file!")
+);
+
+TokenParameters.RefreshLifetime = Int32.Parse(
+    builder.Configuration["JwtSettings:RefreshLifetime"]
         ?? throw new NullReferenceException("Specify lifetime of token in appsetings file!")
 );
 
@@ -59,7 +69,12 @@ TokenParameters.Key = new SymmetricSecurityKey(
 );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => 
+    .AddJwtBearer(options =>
+    {
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = TokenValidations.ValidateTokenParent
+        };
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -68,8 +83,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = TokenParameters.Key
-        });
+        };
+    });
 
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.RefreshOnly, policy =>
+        policy.RequireClaim(ClaimType.TokenType, TokenType.Refresh.ToString())
+    );
+
+    options.AddPolicy(Policies.Admin, policy =>
+    {
+        policy.RequireClaim(ClaimType.Role, Role.Admin.ToString());
+        policy.RequireClaim(ClaimType.TokenType, TokenType.Access.ToString());
+    });
+
+    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireClaim(ClaimType.TokenType, TokenType.Access.ToString())
+        .Build();
+});
 
 
 

@@ -48,9 +48,7 @@ public class AuthController : ControllerBase
     {
         try
         {
-            _authService.Logout(
-                ulong.Parse(User.FindFirst(ClaimsDefault.IssuedByTokenId).Value)
-            );
+            _authService.Logout(ClaimsExtractor.GetParentTokenId(User));
         }
         catch
         {
@@ -81,14 +79,22 @@ public class AuthController : ControllerBase
     [Authorize(Policies.RefreshOnly)]
     public ActionResult<TokenPairModel> Refresh()
     {
-        // try
-        // {
-        //     TokenType type = User.FindFirst(ClaimsDefault.TokenType).Value;
-        //     ulong ParentTokenId = User.FindFirst(ClaimsDefault.TokenId)
-            // _tokenService.InvalidateRefreshToken
-        //     _tokenService.GetTokenPair()
-        // }
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        try
+        {
+            ulong parentTokenId = ClaimsExtractor.GetParentTokenId(User);
+            ulong tokenId = ClaimsExtractor.GetTokenId(User);
+            Guid userId = ClaimsExtractor.GetUserId(User);
+            _tokenService.InvalidateRefreshToken(parentTokenId);
+            return _tokenService.GetTokenPair(userId, tokenId);
+        }
+        catch(BackendException be)
+        {
+            return Problem(be.Message, statusCode: be.HttpCode);
+        }
+        catch
+        {
+            return Problem("Unexpected behaivor", statusCode: 500); 
+        }
     }
     
 } 

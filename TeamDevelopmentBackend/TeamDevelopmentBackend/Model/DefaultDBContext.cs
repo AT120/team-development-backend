@@ -1,5 +1,3 @@
-using System.ComponentModel;
-using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
 

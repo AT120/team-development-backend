@@ -29,11 +29,11 @@ public class TokenIssuanceService : ITokenIssuanceService
         ulong tokenId = (type == TokenType.Refresh) ? _globalCounter.Next() : 0;
 
         Claim[] claims = {
-            new Claim(ClaimsDefault.UserId, user.Id.ToString()),
-            new Claim(ClaimsDefault.Role, user.Role.ToString()),
-            new Claim(ClaimsDefault.TokenId, tokenId.ToString()),
-            new Claim(ClaimsDefault.IssuedByTokenId, IssuedByTokenId.ToString()),
-            new Claim(ClaimsDefault.TokenType, type.ToString())
+            new Claim(ClaimType.UserId, user.Id.ToString()),
+            new Claim(ClaimType.Role, user.Role.ToString()),
+            new Claim(ClaimType.TokenId, tokenId.ToString()),
+            new Claim(ClaimType.IssuedByTokenId, IssuedByTokenId.ToString()),
+            new Claim(ClaimType.TokenType, type.ToString())
         };
 
         return claims;
@@ -44,11 +44,12 @@ public class TokenIssuanceService : ITokenIssuanceService
     private string GenerateToken(UserDbModel user, TokenType type, ulong refreshTokenId)
     {
         Claim[] claims = GetClaims(user, type, refreshTokenId);
+        int lifetime = (type == TokenType.Refresh) ? TokenParameters.RefreshLifetime : TokenParameters.AccessLifetime;
         var now = DateTime.UtcNow;
         var token = new JwtSecurityToken(
             issuer: TokenParameters.Issuer,
             notBefore: now,
-            expires: now.AddMinutes(TokenParameters.Lifetime),
+            expires: now.AddMinutes(lifetime),
             claims: claims,
             signingCredentials: new SigningCredentials(
                 TokenParameters.Key,
