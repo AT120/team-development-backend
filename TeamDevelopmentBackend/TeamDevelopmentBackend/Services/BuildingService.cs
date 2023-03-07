@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
 
@@ -7,9 +8,11 @@ namespace TeamDevelopmentBackend.Services
     public class BuildingService : IBuildingService
     {
         private readonly DefaultDBContext _dbContext;
-        public BuildingService(DefaultDBContext dBContext) 
+        private IRoomService _roomService;
+        public BuildingService(DefaultDBContext dBContext, IRoomService roomService) 
         {
         _dbContext= dBContext;
+        _roomService= roomService;
         }
         public async Task AddBuilding(NameModel name)
         {
@@ -19,10 +22,11 @@ namespace TeamDevelopmentBackend.Services
 
         public async Task RemoveBuilding(Guid Id)
         {
-            var building = _dbContext.Buildings.FirstOrDefault(x => x.Id == Id);
+            var building = _dbContext.Buildings.Include(u=>u.Rooms).FirstOrDefault(x => x.Id == Id);
             if (building != null)
             {
-                 _dbContext.Buildings.Remove(building);
+                building.Rooms.ToList().ForEach(async x => await _roomService.RemoveRoom(x.Id));
+                _dbContext.Buildings.Remove(building);
                 await _dbContext.SaveChangesAsync();
             }
             else
