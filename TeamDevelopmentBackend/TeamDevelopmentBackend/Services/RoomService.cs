@@ -40,5 +40,24 @@ namespace TeamDevelopmentBackend.Services
             }       
 
         }
+
+        public RoomDTOModel[] GetRooms(Guid buildingId)
+        {
+            var building = _dbContext.Buildings.FirstOrDefault(x => x.Id == buildingId);
+            if (building == null)
+            {
+                throw new InvalidOperationException("There is no building with this Id!");
+            }
+            else
+            {
+                var rooms = _dbContext.Rooms.Where(x => x.Building == building).ToArray();
+                RoomDTOModel[] answer = new RoomDTOModel[rooms.Length];
+                for (int i = 0; i < rooms.Length; i++)
+                {
+                    answer[i] = new RoomDTOModel(rooms[i]);
+                }
+                return answer;
+            }
+        }
     }
 }

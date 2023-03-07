@@ -16,9 +16,16 @@ public class RoomsController : ControllerBase
         _roomService = roomService;
     }
     [HttpGet]
-    public ActionResult<ICollection<BuildingDTOModel>> GetRooms(Guid buildingId)
+    public ActionResult<ICollection<RoomDTOModel>> GetRooms(Guid buildingId)
     {
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        try
+        {
+            return _roomService.GetRooms(buildingId);
+        }
+        catch(Exception ex)
+        {
+            return Problem(ex.Message, statusCode: 404);
+        }
     }
 
     [HttpPost]
