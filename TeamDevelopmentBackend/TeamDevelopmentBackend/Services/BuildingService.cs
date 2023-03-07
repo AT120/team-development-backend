@@ -30,5 +30,10 @@ namespace TeamDevelopmentBackend.Services
                 throw new Exception("There is no building with this Id!"); 
             }
         }
+
+        public BuildingDTOModel[] GetBuildings()
+        {
+            return _dbContext.Buildings.Select(x => new BuildingDTOModel(x)).ToArray();
+        }
     }
 }

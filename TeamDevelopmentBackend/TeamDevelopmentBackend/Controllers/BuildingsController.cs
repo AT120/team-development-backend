@@ -19,7 +19,7 @@ public class BuildingsController : ControllerBase
     [HttpGet]
     public ActionResult<ICollection<BuildingDTOModel>> GetBuildings()
     {
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        return _buildingsService.GetBuildings();
     }
 
     [HttpPost]
