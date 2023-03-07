@@ -31,7 +31,7 @@ namespace TeamDevelopmentBackend.Services
 
         public GroupDbModel[] GetGroups()
         {
-            return _dbContext.Groups.Select(x => new GroupDbModel()).ToArray();
+            return _dbContext.Groups.ToArray();
         }
     }
 }

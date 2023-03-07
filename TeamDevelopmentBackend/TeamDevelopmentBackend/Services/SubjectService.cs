@@ -11,7 +11,7 @@ namespace TeamDevelopmentBackend.Services
         }
         public SubjectDbModel[] GetSubjects()
         {
-            return _dbContext.Subjects.Select(x => new SubjectDbModel()).ToArray();
+            return _dbContext.Subjects.ToArray();
         }
         public async Task AddSubject(string name)
         {

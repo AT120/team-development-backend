@@ -12,7 +12,7 @@ namespace TeamDevelopmentBackend.Services
         }
         public TeacherDbModel[] GetTeachers()
         {
-            return _dbContext.Teachers.Select(x => new TeacherDbModel()).ToArray();
+            return _dbContext.Teachers.ToArray();
         }
         public async Task AddTeacher(string name)
         {
