@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Services;
 
 namespace TeamDevelopmentBackend.Controllers
@@ -24,8 +25,8 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> Post(string name) //TODO: wrap name in model
+       // [Authorize]
+        public async Task<IActionResult> Post(NameModel name) 
         {
             try
             {
