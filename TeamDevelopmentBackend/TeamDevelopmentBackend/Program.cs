@@ -70,7 +70,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.Events = new JwtBearerEvents
         {
-            OnTokenValidated = TokenValidations.ValidateTokenParent
+            OnTokenValidated = ValidatorsPile.ValidateTokenParent
         };
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -88,12 +88,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(Policies.RefreshOnly, policy =>
-        policy.RequireClaim(ClaimType.TokenType, TokenType.Refresh.ToString())
-    );
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(ClaimType.TokenType, TokenType.Refresh.ToString());
+    });
 
     options.AddPolicy(Policies.Admin, policy =>
     {
-        policy.RequireClaim(ClaimType.Role, Role.Admin.ToString());
+        policy.RequireAuthenticatedUser();
+        policy.RequireAssertion(ValidatorsPile.ValidateAdminRole);
         policy.RequireClaim(ClaimType.TokenType, TokenType.Access.ToString());
     });
 

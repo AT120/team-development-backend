@@ -45,7 +45,8 @@ public class AuthService : IAuthService
             Id = new Guid(),
             Login = creds.Email,
             PasswordHash = Hash(creds.Password),
-            Name = creds.Name
+            Name = creds.Name,
+            Role = Role.Student
         };
 
         await _dbcontext.Users.AddAsync(user);
