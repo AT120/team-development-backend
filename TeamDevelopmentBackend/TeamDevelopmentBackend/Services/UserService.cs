@@ -10,9 +10,9 @@ namespace TeamDevelopmentBackend.Services
         {
         _dbContext= dBContext;
         }
-        public async Task GiveUserARole(LoginDTOModel userLogin, Role role, Guid? teacherId=null)
+        public async Task GiveUserARole(string userLogin, Role role, Guid? teacherId=null)
         {
-            var user = _dbContext.Users.FirstOrDefault(x => x.Login == userLogin.Login);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Login == userLogin);
 
             if (user == null)
             {

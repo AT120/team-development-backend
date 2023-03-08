@@ -32,9 +32,9 @@ namespace TeamDevelopmentBackend.Controllers
             return Problem("This method has not been yet implemented", statusCode: 501);
         }
 
-        [HttpPost("{role}")]
+        [HttpPut("{login}/role")]
       //  [Authorize]
-        public async Task<IActionResult> Put(Role role, LoginDTOModel model,Guid? teacherId)
+        public async Task<IActionResult> Put(string login, RoleEditModel role)
         {
             if (!ModelState.IsValid)
             {
@@ -42,7 +42,7 @@ namespace TeamDevelopmentBackend.Controllers
             }
             try
             {
-                await _userService.GiveUserARole(model, role,teacherId);
+                await _userService.GiveUserARole(login, role.Role, role.TeacherId);
                 return Ok();
             }
             catch (ArgumentException ex)

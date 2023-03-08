@@ -5,6 +5,6 @@ namespace TeamDevelopmentBackend.Services
 {
     public interface IUserService
     {
-        public Task GiveUserARole(LoginDTOModel userLogin, Role role,Guid? teacherId=null);
+        public Task GiveUserARole(string userLogin, Role role, Guid? teacherId=null);
     }
 }

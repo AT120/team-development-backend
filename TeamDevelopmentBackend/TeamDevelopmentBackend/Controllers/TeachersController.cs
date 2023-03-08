@@ -38,13 +38,13 @@ namespace TeamDevelopmentBackend.Controllers
             }
         }
 
-        [HttpDelete("{subjectId}")]
+        [HttpDelete("{teacherId}")]
         [Authorize]
-        public async Task<IActionResult> Delete(Guid subjectId)
+        public async Task<IActionResult> Delete(Guid teacherId)
         {
             try
             {
-                await _teacherService.DeleteTeacher(subjectId);
+                await _teacherService.DeleteTeacher(teacherId);
                 return Ok();
             }
             catch (Exception ex)
