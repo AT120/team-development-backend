@@ -30,7 +30,6 @@ public class TokenIssuanceService : ITokenIssuanceService
 
         Claim[] claims = {
             new Claim(ClaimType.UserId, user.Id.ToString()),
-            new Claim(ClaimType.Role, user.Role.ToString()),
             new Claim(ClaimType.TokenId, tokenId.ToString()),
             new Claim(ClaimType.IssuedByTokenId, IssuedByTokenId.ToString()),
             new Claim(ClaimType.TokenType, type.ToString())
