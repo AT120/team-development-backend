@@ -1,4 +1,6 @@
-﻿namespace TeamDevelopmentBackend.Services.Interfaces
+﻿using TeamDevelopmentBackend.Model;
+
+namespace TeamDevelopmentBackend.Services.Interfaces
 {
     public interface ISubjectService
     {

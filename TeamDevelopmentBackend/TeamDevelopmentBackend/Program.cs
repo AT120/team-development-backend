@@ -27,7 +27,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBuildingService, BuildingService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
-builder.Services.AddSingleton<IGlobalCounter<ulong>, GlobalCounterService>();
+builder.Services.AddScoped<IGlobalCounter<ulong>, GlobalCounterService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenIssuanceService, TokenIssuanceService>();
 builder.Services.AddScoped<IGlobalCounter<ulong>, GlobalCounterService>();
