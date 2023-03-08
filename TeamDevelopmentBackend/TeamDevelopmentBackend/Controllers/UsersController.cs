@@ -22,14 +22,37 @@ namespace TeamDevelopmentBackend.Controllers
         [Authorize]
         public ActionResult<UserInfoModel> GetUserInfo()
         {
-            return Problem("This method has not been yet implemented", statusCode: 501);
+            try
+            {
+                return _userService.GetUserInfo(ClaimsExtractor.GetUserId(User));
+            }
+            catch(BackendException be)
+            {
+                return Problem(be.Message, statusCode: be.HttpCode);
+            }
+            catch
+            {
+                return Problem("Unexpected behaivor", statusCode: 500); 
+            }
         }
 
         [HttpPut("group")]
         [Authorize]
         public ActionResult EditGroup(GroupEditModel group)
         {
-            return Problem("This method has not been yet implemented", statusCode: 501);
+            try
+            {
+                _userService.EditGroup(group.GroupId, ClaimsExtractor.GetUserId(User));
+                return Ok();
+            }
+            catch(BackendException be)
+            {
+                return Problem(be.Message, statusCode: be.HttpCode);
+            }
+            catch
+            {
+                return Problem("Unexpected behaivor", statusCode: 500); 
+            }
         }
 
         [HttpPut("{login}/role")]
@@ -48,7 +71,7 @@ namespace TeamDevelopmentBackend.Controllers
             catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
-            }
+            } //TODO: catch another exception types
         }
     }
 }
