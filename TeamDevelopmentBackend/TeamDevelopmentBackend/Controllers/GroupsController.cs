@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Controllers
 {
@@ -25,7 +25,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-       // [Authorize]
+        [Authorize]
         public async Task<IActionResult> Post(NameModel name) 
         {
             try

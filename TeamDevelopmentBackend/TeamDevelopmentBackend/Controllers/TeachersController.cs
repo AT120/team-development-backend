@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TeamDevelopmentBackend.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using TeamDevelopmentBackend.Services.Interfaces;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Model;
 using Microsoft.AspNetCore.Authorization;
@@ -38,18 +37,22 @@ namespace TeamDevelopmentBackend.Controllers
             }
         }
 
-        [HttpDelete("{subjectId}")]
+        [HttpDelete("{teacherId}")]
         [Authorize]
-        public async Task<IActionResult> Delete(Guid subjectId)
+        public async Task<IActionResult> Delete(Guid teacherId)
         {
             try
             {
-                await _teacherService.DeleteTeacher(subjectId);
+                await _teacherService.DeleteTeacher(teacherId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
     }

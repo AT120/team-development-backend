@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TeamDevelopmentBackend.Model;
+﻿using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Services
 {
@@ -22,22 +22,29 @@ namespace TeamDevelopmentBackend.Services
 
         public async Task DeleteTeacher(Guid Id)
         {
-            var teacher = _dbContext.Teachers.FirstOrDefault(x => x.Id == Id);
-            try
-            {
-                _dbContext.Teachers.Remove(teacher);
-                var user = _dbContext.Users.FirstOrDefault(x=> x.Id == Id);
+            var teacher = await _dbContext.Teachers.FindAsync(Id);
+            if (teacher != null) {                           
                 var lessons = _dbContext.Lessons.Where(x => x.TeacherId==Id && x.StartDate>=DateOnly.FromDateTime(DateTime.Now)).ToList();
-                lessons.ForEach(x => _dbContext.Remove(x));
-                if (user != null)
+                if (lessons.Count == 0)
                 {
-                    user.Role = Role.Student;
+                    throw new InvalidOperationException("There is lesson in the past with this subject!");
                 }
-                await _dbContext.SaveChangesAsync();
+                else   
+                {
+                    var user = await _dbContext.Users.FindAsync(Id);
+                    lessons.ForEach(x => _dbContext.Remove(x));
+                    _dbContext.Teachers.Remove(teacher);
+                    if (user != null)
+                    {
+                        user.Role = Role.Student;
+                        user.DefaultFilterId = null;
+                    }
+                    await _dbContext.SaveChangesAsync();
+                }              
             }
-            catch
+            else
             {
-                throw new Exception("There is no teacher with this ID!");
+                throw new ArgumentException("There is no teacher with this ID!");
             }
 
         }

@@ -1,6 +1,6 @@
 ﻿using TeamDevelopmentBackend.Model.DTO;
 
-namespace TeamDevelopmentBackend.Services
+namespace TeamDevelopmentBackend.Services.Interfaces
 {
     public interface ILessonService
     {

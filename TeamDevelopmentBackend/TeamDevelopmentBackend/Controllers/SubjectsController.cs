@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Controllers
 {
@@ -50,9 +50,13 @@ namespace TeamDevelopmentBackend.Controllers
                 await _subjectService.DeleteSubject(subjectId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
 
