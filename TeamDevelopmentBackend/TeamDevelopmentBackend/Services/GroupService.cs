@@ -23,7 +23,7 @@ namespace TeamDevelopmentBackend.Services
             if (group != null) { 
                 var lessons = _dbContext.Lessons.Where(x => x.GroupId == id && x.StartDate >= DateOnly.FromDateTime(DateTime.Now)).ToList();
                 lessons.ForEach(x => _dbContext.Remove(x));
-                var users = _dbContext.Users.Where(x => x.Group==group).ToList();
+                var users = _dbContext.Users.Where(x => x.DefaultFilterId==id).ToList();
                 users.ForEach(x => _dbContext.Remove(x));
                 _dbContext.Groups.Remove(group);
                 await _dbContext.SaveChangesAsync();

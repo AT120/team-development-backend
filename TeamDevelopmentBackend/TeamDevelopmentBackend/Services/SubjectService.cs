@@ -29,16 +29,23 @@ namespace TeamDevelopmentBackend.Services
 
         public async Task DeleteSubject(Guid Id)
         {
-            var subject= _dbContext.Subjects.FirstOrDefault(x => x.Id == Id);
-            try
-            {
+            var subject=await _dbContext.Subjects.FindAsync(Id);
+            Console.WriteLine(subject);
+            if (subject != null) {
                 var lessons = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate >= DateOnly.FromDateTime(DateTime.Now)).ToList();
-                lessons.ForEach(x => _dbContext.Remove(x));
-                _dbContext.Subjects.Remove(subject);
-                await _dbContext.SaveChangesAsync();
+                if (lessons.Count == 0)
+                {
+                    throw new InvalidOperationException("There is lesson in the past with this subject!");
+                }
+                else
+                {
+                    lessons.ForEach(x => _dbContext.Remove(x));
+                    _dbContext.Subjects.Remove(subject);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
-            catch {
-                throw new Exception("There is no subject with this ID!");
+            else {
+                throw new ArgumentException("There is no subject with this ID!");
             }
             
         }

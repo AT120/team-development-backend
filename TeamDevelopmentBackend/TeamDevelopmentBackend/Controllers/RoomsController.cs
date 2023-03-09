@@ -29,7 +29,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> CreateRoom(Guid buildingId,NameModel room)
     {
         try
@@ -44,7 +44,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
-    //[Authorize]
+    [Authorize]
     public async Task<IActionResult> DeleteRoom(Guid roomId)
     {
         try
