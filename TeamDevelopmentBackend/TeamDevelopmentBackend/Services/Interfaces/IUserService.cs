@@ -1,4 +1,4 @@
-﻿using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.User;
 
 namespace TeamDevelopmentBackend.Services.Interfaces
