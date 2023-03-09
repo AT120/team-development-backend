@@ -32,6 +32,8 @@ namespace TeamDevelopmentBackend.Services
             var subject= _dbContext.Subjects.FirstOrDefault(x => x.Id == Id);
             try
             {
+                var lessons = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate >= DateOnly.FromDateTime(DateTime.Now)).ToList();
+                lessons.ForEach(x => _dbContext.Remove(x));
                 _dbContext.Subjects.Remove(subject);
                 await _dbContext.SaveChangesAsync();
             }
