@@ -1,4 +1,4 @@
-﻿using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Services
@@ -25,7 +25,8 @@ namespace TeamDevelopmentBackend.Services
             var teacher = await _dbContext.Teachers.FindAsync(Id);
             if (teacher != null) {                           
                 var lessons = _dbContext.Lessons.Where(x => x.TeacherId==Id && x.StartDate>=DateOnly.FromDateTime(DateTime.Now)).ToList();
-                if (lessons.Count == 0)
+                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
+                if (lessons2.Count != 0)
                 {
                     throw new InvalidOperationException("There is lesson in the past with this subject!");
                 }
