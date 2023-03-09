@@ -26,7 +26,7 @@ namespace TeamDevelopmentBackend.Controllers
 
 
         [HttpPost]
-        [Authorize(Policies.Admin)]
+        [Authorize]
         public async Task<IActionResult> Post(NameModel subject)
         {
             try
@@ -50,9 +50,13 @@ namespace TeamDevelopmentBackend.Controllers
                 await _subjectService.DeleteSubject(subjectId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
 

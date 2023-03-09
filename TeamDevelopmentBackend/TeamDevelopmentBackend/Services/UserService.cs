@@ -52,18 +52,14 @@ namespace TeamDevelopmentBackend.Services
             }
             else
             {
-                if(user.Role == Role.Teacher && role!=Role.Teacher) 
+                if (role == Role.Teacher)
                 {
-                    user.Id = new Guid();
-                }
-               else if (role == Role.Teacher)
-                {
-                    var teacher = _dbContext.Users.FirstOrDefault(x => x.Id == teacherId); //TODO: teachers?
+                    var teacher = _dbContext.Teachers.FirstOrDefault(x => x.Id == teacherId); //TODO: teachers?
                     if (teacher == null)
                     {
                         throw new Exception("There is no teacher with this Id!");
                     }
-                    user.Id = teacher.Id;
+                    user.DefaultFilterId = teacher.Id;
                 }
 
                 user.Role = role;

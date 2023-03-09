@@ -25,7 +25,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-       // [Authorize]
+        [Authorize]
         public async Task<IActionResult> Post(NameModel name) 
         {
             try

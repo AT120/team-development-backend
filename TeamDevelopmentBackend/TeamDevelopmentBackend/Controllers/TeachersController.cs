@@ -46,9 +46,13 @@ namespace TeamDevelopmentBackend.Controllers
                 await _teacherService.DeleteTeacher(teacherId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
     }

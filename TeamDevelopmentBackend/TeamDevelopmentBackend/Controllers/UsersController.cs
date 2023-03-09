@@ -56,7 +56,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPut("{login}/role")]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> Put(string login, RoleEditModel role)
         {
             if (!ModelState.IsValid)
