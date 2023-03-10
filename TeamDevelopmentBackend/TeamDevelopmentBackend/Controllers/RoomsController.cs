@@ -29,7 +29,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+   // [Authorize]
     public async Task<IActionResult> CreateRoom(Guid buildingId,NameModel room)
     {
         try
@@ -44,7 +44,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
-    [Authorize]
+   // [Authorize]
     public async Task<IActionResult> DeleteRoom(Guid roomId)
     {
         try
@@ -52,9 +52,13 @@ public class RoomsController : ControllerBase
             await _roomService.RemoveRoom(roomId);
             return Ok();
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             return Problem(ex.Message, statusCode: 404);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(ex.Message, statusCode: 400);
         }
     }
 }

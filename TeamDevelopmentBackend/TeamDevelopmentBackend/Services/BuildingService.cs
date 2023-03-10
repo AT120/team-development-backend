@@ -25,7 +25,10 @@ namespace TeamDevelopmentBackend.Services
             var building = _dbContext.Buildings.Include(u=>u.Rooms).FirstOrDefault(x => x.Id == Id);
             if (building != null)
             {
-                building.Rooms.ToList().ForEach(async x => await _roomService.RemoveRoom(x.Id));
+                foreach (var room in building.Rooms)
+                {
+                    await _roomService.RemoveRoom(room.Id);
+                }
                 _dbContext.Buildings.Remove(building);
                 await _dbContext.SaveChangesAsync();
             }
