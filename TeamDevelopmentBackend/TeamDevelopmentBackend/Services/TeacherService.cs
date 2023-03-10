@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Services
 {
@@ -10,6 +10,10 @@ namespace TeamDevelopmentBackend.Services
         {
             _dbContext = dbContext;
         }
+        public TeacherDbModel[] GetTeachers()
+        {
+            return _dbContext.Teachers.ToArray();
+        }
         public async Task AddTeacher(string name)
         {
                 _dbContext.Teachers.Add(new TeacherDbModel { Id = new Guid(), Name = name });
@@ -18,15 +22,30 @@ namespace TeamDevelopmentBackend.Services
 
         public async Task DeleteTeacher(Guid Id)
         {
-            var teacher = _dbContext.Teachers.FirstOrDefault(x => x.Id == Id);
-            try
-            {
-                _dbContext.Teachers.Remove(teacher);
-                await _dbContext.SaveChangesAsync();
+            var teacher = await _dbContext.Teachers.FindAsync(Id);
+            if (teacher != null) {                           
+                var lessons = _dbContext.Lessons.Where(x => x.TeacherId==Id && x.StartDate>=DateOnly.FromDateTime(DateTime.Now)).ToList();
+                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
+                if (lessons2.Count != 0)
+                {
+                    throw new InvalidOperationException("There is lesson in the past with this subject!");
+                }
+                else   
+                {
+                    var user = await _dbContext.Users.FindAsync(Id);
+                    lessons.ForEach(x => _dbContext.Remove(x));
+                    _dbContext.Teachers.Remove(teacher);
+                    if (user != null)
+                    {
+                        user.Role = Role.Student;
+                        user.DefaultFilterId = null;
+                    }
+                    await _dbContext.SaveChangesAsync();
+                }              
             }
-            catch
+            else
             {
-                throw new Exception("There is no teacher with this ID!");
+                throw new ArgumentException("There is no teacher with this ID!");
             }
 
         }

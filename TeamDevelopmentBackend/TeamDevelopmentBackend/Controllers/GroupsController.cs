@@ -1,9 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Model.DTO;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Controllers
 {
@@ -20,12 +21,12 @@ namespace TeamDevelopmentBackend.Controllers
         [HttpGet]
         public ActionResult<ICollection<GroupDbModel>> Get()
         {
-            return Problem("This method has not been yet implemented", statusCode: 501); 
+            return _groupService.GetGroups(); 
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Post(string name) //TODO: wrap name in model
+        public async Task<IActionResult> Post(NameModel name) 
         {
             try
             {

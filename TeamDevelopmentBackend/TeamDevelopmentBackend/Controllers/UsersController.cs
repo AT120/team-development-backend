@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO.User;
-using TeamDevelopmentBackend.Services;
+using TeamDevelopmentBackend.Services.Interfaces;
 
 namespace TeamDevelopmentBackend.Controllers
 {
@@ -22,19 +22,42 @@ namespace TeamDevelopmentBackend.Controllers
         [Authorize]
         public ActionResult<UserInfoModel> GetUserInfo()
         {
-            return Problem("This method has not been yet implemented", statusCode: 501);
+            try
+            {
+                return _userService.GetUserInfo(ClaimsExtractor.GetUserId(User));
+            }
+            catch(BackendException be)
+            {
+                return Problem(be.Message, statusCode: be.HttpCode);
+            }
+            catch
+            {
+                return Problem("Unexpected behaivor", statusCode: 500); 
+            }
         }
 
         [HttpPut("group")]
         [Authorize]
         public ActionResult EditGroup(GroupEditModel group)
         {
-            return Problem("This method has not been yet implemented", statusCode: 501);
+            try
+            {
+                _userService.EditGroup(group.GroupId, ClaimsExtractor.GetUserId(User));
+                return Ok();
+            }
+            catch(BackendException be)
+            {
+                return Problem(be.Message, statusCode: be.HttpCode);
+            }
+            catch
+            {
+                return Problem("Unexpected behaivor", statusCode: 500); 
+            }
         }
 
-        [HttpPost("{role}")]
-      //  [Authorize]
-        public async Task<IActionResult> Put(Role role, LoginDTOModel model,Guid? teacherId)
+        [HttpPut("{login}/role")]
+        [Authorize]
+        public async Task<IActionResult> Put(string login, RoleEditModel role)
         {
             if (!ModelState.IsValid)
             {
@@ -42,13 +65,13 @@ namespace TeamDevelopmentBackend.Controllers
             }
             try
             {
-                await _userService.GiveUserARole(model, role,teacherId);
+                await _userService.GiveUserARole(login, role.Role, role.TeacherId);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
-            }
+            } //TODO: catch another exception types
         }
     }
 }

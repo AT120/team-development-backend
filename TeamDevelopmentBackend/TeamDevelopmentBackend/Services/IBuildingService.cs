@@ -6,5 +6,6 @@ namespace TeamDevelopmentBackend.Services
     {
         public Task AddBuilding(NameModel name);
         public Task RemoveBuilding(Guid Id);
+        public BuildingDTOModel[] GetBuildings();
     }
 }

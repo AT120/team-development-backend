@@ -10,9 +10,11 @@ namespace TeamDevelopmentBackend.Model
         [EmailAddress]
         public string Login { get; set; }
         [Required]
-        public byte[] Password { get; set; }
+        public byte[] PasswordHash { get; set; }
         [Required]
         public Role Role { get; set; }
-        public GroupDbModel? Group { get; set; }
+        [Required]
+        public string Name { get; set; }
+        public Guid? DefaultFilterId { get; set; }
     }
 }

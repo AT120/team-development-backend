@@ -16,13 +16,20 @@ public class RoomsController : ControllerBase
         _roomService = roomService;
     }
     [HttpGet]
-    public ActionResult<ICollection<BuildingDTOModel>> GetRooms(Guid buildingId)
+    public ActionResult<ICollection<RoomDTOModel>> GetRooms(Guid buildingId)
     {
-        return Problem("This method has not been yet implemented", statusCode: 501); 
+        try
+        {
+            return _roomService.GetRooms(buildingId);
+        }
+        catch(Exception ex)
+        {
+            return Problem(ex.Message, statusCode: 404);
+        }
     }
 
     [HttpPost]
-    //[Authorize]
+   // [Authorize]
     public async Task<IActionResult> CreateRoom(Guid buildingId,NameModel room)
     {
         try
@@ -37,7 +44,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
-    //[Authorize]
+   // [Authorize]
     public async Task<IActionResult> DeleteRoom(Guid roomId)
     {
         try
@@ -45,9 +52,13 @@ public class RoomsController : ControllerBase
             await _roomService.RemoveRoom(roomId);
             return Ok();
         }
-        catch (Exception ex)
+        catch (ArgumentException ex)
         {
             return Problem(ex.Message, statusCode: 404);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(ex.Message, statusCode: 400);
         }
     }
 }

@@ -1,6 +1,6 @@
 using TeamDevelopmentBackend.Model.DTO.Schedule;
 
-namespace TeamDevelopmentBackend.Services;
+namespace TeamDevelopmentBackend.Services.Interfaces;
 
 public interface IScheduleService
 {
