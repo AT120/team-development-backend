@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Services;
 
@@ -29,7 +30,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpPost]
-   // [Authorize]
+    [Authorize(Policies.Admin)]
     public async Task<IActionResult> CreateRoom(Guid buildingId,NameModel room)
     {
         try
@@ -44,7 +45,7 @@ public class RoomsController : ControllerBase
     }
 
     [HttpDelete("/api/buildings/rooms/{roomId}")]
-   // [Authorize]
+    [Authorize(Policies.Admin)]
     public async Task<IActionResult> DeleteRoom(Guid roomId)
     {
         try

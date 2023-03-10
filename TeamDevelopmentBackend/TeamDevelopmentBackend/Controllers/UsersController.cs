@@ -56,7 +56,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPut("{login}/role")]
-        [Authorize]
+        [Authorize(Policies.Admin)]
         public async Task<IActionResult> Put(string login, RoleEditModel role)
         {
             if (!ModelState.IsValid)
@@ -68,10 +68,10 @@ namespace TeamDevelopmentBackend.Controllers
                 await _userService.GiveUserARole(login, role.Role, role.TeacherId);
                 return Ok();
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 return Problem(ex.Message, statusCode: 404);
-            } //TODO: catch another exception types
+            } 
         }
     }
 }
