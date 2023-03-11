@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeamDevelopmentBackend.Model;
@@ -23,7 +24,7 @@ public class AuthController : ControllerBase
         _tokenService = tokenService;
     
     }
-
+    [EnableCors("MyAllowSpecificOrigins")]
     [HttpPost("login")]
     public async Task<ActionResult<TokenPairModel>> Login(LoginCredsModel creds)
     {
