@@ -25,7 +25,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policies.Admin)]
         public async Task<IActionResult> Post(NameModel name) 
         {
             try
@@ -40,7 +40,7 @@ namespace TeamDevelopmentBackend.Controllers
         }
 
         [HttpDelete("{groupId}")]
-        [Authorize]
+        [Authorize(Policies.Admin)]
         public async Task<IActionResult> Delete(Guid groupId)
         {
             try

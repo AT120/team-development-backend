@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Model.DTO;
 using TeamDevelopmentBackend.Services;
 
@@ -23,7 +24,7 @@ public class BuildingsController : ControllerBase
     }
 
     [HttpPost]
-   // [Authorize]
+    [Authorize(Policies.Admin)]
     public async Task<IActionResult> CreateBuilding(NameModel building)
     {
 
@@ -39,7 +40,7 @@ public class BuildingsController : ControllerBase
     }
 
     [HttpDelete("{buildingId}")]
-    //[Authorize]
+    [Authorize(Policies.Admin)]
     public async Task<IActionResult> DeleteBuilding(Guid buildingId)
     {
         try
