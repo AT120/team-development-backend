@@ -24,7 +24,6 @@ public class AuthController : ControllerBase
         _tokenService = tokenService;
     
     }
-    [EnableCors("MyAllowSpecificOrigins")]
     [HttpPost("login")]
     public async Task<ActionResult<TokenPairModel>> Login(LoginCredsModel creds)
     {
