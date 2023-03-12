@@ -42,7 +42,7 @@ namespace TeamDevelopmentBackend.Services
                 }
                 catch
                 {
-                    throw new ArgumentException("One of the Id's is Incorrect!");
+                    throw new ArgumentException("One or more Id's is Incorrect!");
                 }
             }
             else
@@ -71,12 +71,14 @@ namespace TeamDevelopmentBackend.Services
         {
 
             var lesson = _dbContext.Lessons.FirstOrDefault(x => x.Id == lessonId);
+            bool lessonIsInDb = false;
             if (lesson == null)
             {
                 throw new RankException("There is no lesson with this ID!"); //TODO: change RankException
             }
             else
             {
+                var lessonEndDate = lesson.EndDate;
                 var newLesson = new LessonDbModel
                 {
                     Id = new Guid(),
@@ -95,19 +97,34 @@ namespace TeamDevelopmentBackend.Services
                 }
                 _dbContext.Lessons.Remove(lesson);
                 await _dbContext.SaveChangesAsync();
-                if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
+                if (await _dbContext.CheckIfCanBeAddedInDatabase(newLesson))
                 {
                     if (lesson.StartDate < DateOnly.FromDateTime(DateTime.Now).AddDays(-1))
                     {
                         lesson.EndDate = DateOnly.FromDateTime(DateTime.Now);
-                        newLesson.StartDate = DateOnly.FromDateTime(DateTime.Now);
+                        newLesson.StartDate = newLesson.StartDate > DateOnly.FromDateTime(DateTime.Now)? newLesson.StartDate : DateOnly.FromDateTime(DateTime.Now);
                         _dbContext.Lessons.Add(lesson);
+                        lessonIsInDb = true;
                     }
                     if (newLesson.EndDate > newLesson.StartDate)
                     {
-                        _dbContext.Lessons.Add(newLesson);
-                    }
-                    await _dbContext.SaveChangesAsync();
+                        try
+                        {
+                            _dbContext.Lessons.Add(newLesson);
+                            await _dbContext.SaveChangesAsync();
+                        }
+                        catch
+                        {
+                            lesson.EndDate = lessonEndDate;
+                            if (!lessonIsInDb)
+                            {
+                                _dbContext.Lessons.Add(lesson);
+                            }
+                            _dbContext.Lessons.Remove(newLesson);
+                            await _dbContext.SaveChangesAsync();
+                            throw new ArgumentException("test");
+                        }
+                    }                    
 
                 }
                 else
