@@ -13,8 +13,15 @@ namespace TeamDevelopmentBackend.Services
         }
         public async Task AddGroup(NameModel groupName)
         {
-            _dbContext.Groups.Add(new GroupDbModel { Id=new Guid(), Name = groupName.Name });
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+               await _dbContext.Groups.AddAsync(new GroupDbModel { Id = new Guid(), Name = groupName.Name });
+               await _dbContext.SaveChangesAsync();
+            }
+            catch 
+            {
+                throw new Exception("There is already group with this name!");
+            }
         }
 
         public async Task DeleteGroup(Guid id)

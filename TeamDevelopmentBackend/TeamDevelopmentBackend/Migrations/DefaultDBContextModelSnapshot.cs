@@ -33,6 +33,9 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Buildings");
                 });
 
@@ -63,6 +66,9 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Groups");
                 });
@@ -154,6 +160,9 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });

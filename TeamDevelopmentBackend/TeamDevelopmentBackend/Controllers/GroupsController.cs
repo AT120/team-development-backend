@@ -35,7 +35,7 @@ namespace TeamDevelopmentBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Problem("", statusCode: 502);
+                return Problem(ex.Message, statusCode: 409);
             }
         }
 

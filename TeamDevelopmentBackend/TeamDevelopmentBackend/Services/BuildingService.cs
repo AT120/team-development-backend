@@ -16,8 +16,15 @@ namespace TeamDevelopmentBackend.Services
         }
         public async Task AddBuilding(NameModel name)
         {
-           await _dbContext.Buildings.AddAsync(new BuildingDbModel { Id=new Guid(),Name=name.Name});
-           await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.Buildings.AddAsync(new BuildingDbModel { Id = new Guid(), Name = name.Name });
+                await _dbContext.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception("There is already building with this name!");
+            }
         }
 
         public async Task RemoveBuilding(Guid Id)
