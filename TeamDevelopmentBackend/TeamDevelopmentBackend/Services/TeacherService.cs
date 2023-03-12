@@ -31,7 +31,7 @@ namespace TeamDevelopmentBackend.Services
                 }
                 else   
                 {
-                    var user = await _dbContext.Users.FindAsync(Id);
+                    var user =  _dbContext.Users.FirstOrDefault(x=>x.DefaultFilterId==Id);
                     _dbContext.Teachers.Remove(teacher);
                     if (user != null)
                     {
