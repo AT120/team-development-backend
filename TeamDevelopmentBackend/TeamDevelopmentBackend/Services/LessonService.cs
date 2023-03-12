@@ -101,7 +101,7 @@ namespace TeamDevelopmentBackend.Services
                 {
                     if (lesson.StartDate < DateOnly.FromDateTime(DateTime.Now).AddDays(-1))
                     {
-                        lesson.EndDate = DateOnly.FromDateTime(DateTime.Now);
+                        lesson.EndDate = lesson.EndDate< DateOnly.FromDateTime(DateTime.Now) ? lesson.EndDate : DateOnly.FromDateTime(DateTime.Now);
                         newLesson.StartDate = newLesson.StartDate > DateOnly.FromDateTime(DateTime.Now)? newLesson.StartDate : DateOnly.FromDateTime(DateTime.Now);
                         _dbContext.Lessons.Add(lesson);
                         lessonIsInDb = true;
@@ -125,7 +125,7 @@ namespace TeamDevelopmentBackend.Services
                             throw new ArgumentException("test");
                         }
                     }                    
-
+                    await _dbContext.SaveChangesAsync();
                 }
                 else
                 {
