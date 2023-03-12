@@ -91,7 +91,7 @@ namespace TeamDevelopmentBackend.Services
                     WeekDay = model.StartDate == null ? lesson.WeekDay : (int)DateOnly.FromDateTime((DateTime)model.StartDate).DayOfWeek,
                     EndDate = model.EndDate == null ? lesson.EndDate : DateOnly.FromDateTime((DateTime)model.EndDate).AddDays(1)
                 };
-                if (newLesson.EndDate < newLesson.StartDate)
+                if (newLesson.EndDate <= newLesson.StartDate)
                 {
                     throw new ArgumentException("Wrong Dates!");
                 }
