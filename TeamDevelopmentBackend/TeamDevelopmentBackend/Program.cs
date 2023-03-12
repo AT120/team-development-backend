@@ -76,6 +76,9 @@ TokenParameters.Key = new SymmetricSecurityKey(
     )
 );
 
+if (TokenParameters.Key.KeySize < 128)
+    throw new ArgumentException("Secret key have to be at least 8 symbols!");
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
