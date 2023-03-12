@@ -54,14 +54,17 @@ namespace TeamDevelopmentBackend.Services
             {
                 if (role == Role.Teacher)
                 {
-                    var teacher = _dbContext.Teachers.FirstOrDefault(x => x.Id == teacherId); //TODO: teachers?
+                    var teacher = _dbContext.Teachers.FirstOrDefault(x => x.Id == teacherId); 
                     if (teacher == null)
                     {
                         throw new Exception("There is no teacher with this Id!");
                     }
                     user.DefaultFilterId = teacher.Id;
                 }
-
+               else if(user.Role == Role.Teacher) 
+                {
+                    user.DefaultFilterId = null;
+                }
                 user.Role = role;
                 await _dbContext.SaveChangesAsync();
             }
