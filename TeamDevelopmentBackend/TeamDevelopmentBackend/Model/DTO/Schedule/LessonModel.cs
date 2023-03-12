@@ -24,6 +24,6 @@ public class LessonModel
         Building = new BuildingDTOModel(lesson.Room.Building);
         Subject = lesson.Subject;
         StartDate = lesson.StartDate.ToDateTime(new TimeOnly());
-        EndDate = lesson.EndDate.ToDateTime(new TimeOnly()); //TODO: maybe if (lesson.EndDate == defaultEndDate) : null ?
+        EndDate = lesson.EndDate.ToDateTime(new TimeOnly()).AddDays(-1); //TODO: maybe if (lesson.EndDate == defaultEndDate) : null ?
     }
 }
