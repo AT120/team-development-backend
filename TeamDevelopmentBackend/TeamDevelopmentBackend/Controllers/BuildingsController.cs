@@ -34,9 +34,9 @@ public class BuildingsController : ControllerBase
             await _buildingsService.AddBuilding(building);
             return Ok();
         }
-        catch
+        catch (Exception ex)
         {
-            return Problem("This method has not been yet implemented", statusCode: 501);
+            return Problem(ex.Message, statusCode: 409);
         }
     }
 
