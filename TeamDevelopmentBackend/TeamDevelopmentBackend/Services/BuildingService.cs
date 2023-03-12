@@ -34,14 +34,21 @@ namespace TeamDevelopmentBackend.Services
             {
                 foreach (var room in building.Rooms)
                 {
-                    await _roomService.RemoveRoom(room.Id);
+                    try
+                    {
+                        await _roomService.RemoveRoom(room.Id);
+                    }
+                    catch(InvalidOperationException ex) 
+                    {
+                        throw ex;
+                    }
                 }
                 _dbContext.Buildings.Remove(building);
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                throw new Exception("There is no building with this Id!"); 
+                throw new ArgumentException("There is no building with this Id!"); 
             }
         }
 

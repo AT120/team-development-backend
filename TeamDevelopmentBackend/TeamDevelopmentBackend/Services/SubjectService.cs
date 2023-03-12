@@ -32,15 +32,13 @@ namespace TeamDevelopmentBackend.Services
             var subject=await _dbContext.Subjects.FindAsync(Id);
             Console.WriteLine(subject);
             if (subject != null) {
-                var lessons = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate >= DateOnly.FromDateTime(DateTime.Now)).ToList();
-                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
-                if (lessons2.Count != 0)
+                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).Count();
+                if (lessons2 != 0)
                 {
-                    throw new InvalidOperationException("There is lesson in the past with this subject!");
+                    throw new InvalidOperationException("There is lesson in the past with this Subject!");
                 }
                 else
                 {
-                    lessons.ForEach(x => _dbContext.Remove(x));
                     _dbContext.Subjects.Remove(subject);
                     await _dbContext.SaveChangesAsync();
                 }

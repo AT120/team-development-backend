@@ -35,15 +35,13 @@ namespace TeamDevelopmentBackend.Services
             }
             else
             {
-                var lessons = _dbContext.Lessons.Where(x => x.RoomId == RoomId && x.StartDate >= DateOnly.FromDateTime(DateTime.Now)).ToList();
-                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == RoomId && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
-                if (lessons2.Count != 0)
+                var lessons2 = _dbContext.Lessons.Where(x => x.RoomId == RoomId && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).Count();
+                if (lessons2 != 0)
                 {
-                    throw new InvalidOperationException("There is lesson in the past with this subject!");
+                    throw new InvalidOperationException("There is lesson in the past with this Room or Building!");
                 }
                 else
                 {
-                    lessons.ForEach(x => _dbContext.Remove(x));
                     _dbContext.Rooms.Remove(room);
                     await _dbContext.SaveChangesAsync();
                 }
