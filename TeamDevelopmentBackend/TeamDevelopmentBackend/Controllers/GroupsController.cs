@@ -35,7 +35,7 @@ namespace TeamDevelopmentBackend.Controllers
             }
             catch (Exception ex)
             {
-                return Problem("", statusCode: 502);
+                return Problem(ex.Message, statusCode: 409);
             }
         }
 
@@ -48,9 +48,13 @@ namespace TeamDevelopmentBackend.Controllers
                 await _groupService.DeleteGroup(groupId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return Problem(ex.Message, statusCode: 404);
+            }
+            catch(InvalidOperationException ex) 
+            {
+                return Problem(ex.Message, statusCode: 400);
             }
         }
     }

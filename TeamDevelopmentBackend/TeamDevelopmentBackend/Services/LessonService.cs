@@ -35,8 +35,15 @@ namespace TeamDevelopmentBackend.Services
             };
             if (await _dbContext.CheckIfCanBeAddedInDatabase(lesson))
             {
-                await _dbContext.Lessons.AddAsync(lesson);
-                await _dbContext.SaveChangesAsync();
+                try
+                {
+                    await _dbContext.Lessons.AddAsync(lesson);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw new ArgumentException("One of the Id's is Incorrect!");
+                }
             }
             else
             {

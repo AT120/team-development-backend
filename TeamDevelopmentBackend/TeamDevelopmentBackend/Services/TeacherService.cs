@@ -24,16 +24,14 @@ namespace TeamDevelopmentBackend.Services
         {
             var teacher = await _dbContext.Teachers.FindAsync(Id);
             if (teacher != null) {                           
-                var lessons = _dbContext.Lessons.Where(x => x.TeacherId==Id && x.StartDate>=DateOnly.FromDateTime(DateTime.Now)).ToList();
-                var lessons2 = _dbContext.Lessons.Where(x => x.SubjectId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
+                var lessons2 = _dbContext.Lessons.Where(x => x.TeacherId == Id && x.StartDate < DateOnly.FromDateTime(DateTime.Now)).ToList();
                 if (lessons2.Count != 0)
                 {
-                    throw new InvalidOperationException("There is lesson in the past with this subject!");
+                    throw new InvalidOperationException("There is lesson in the past with this Teacher!");
                 }
                 else   
                 {
                     var user = await _dbContext.Users.FindAsync(Id);
-                    lessons.ForEach(x => _dbContext.Remove(x));
                     _dbContext.Teachers.Remove(teacher);
                     if (user != null)
                     {

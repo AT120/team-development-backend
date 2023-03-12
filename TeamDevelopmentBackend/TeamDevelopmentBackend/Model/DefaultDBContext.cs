@@ -37,6 +37,10 @@ public class DefaultDBContext: DbContext
     {
         modelBuilder.Entity<LessonDbModel>().Property(l => l.EndDate).HasDefaultValue(endDateDefault);
         modelBuilder.Entity<UserDbModel>().HasIndex(u => u.Login).IsUnique();
+        modelBuilder.Entity<GroupDbModel>().HasIndex(u=>u.Name).IsUnique();
+        modelBuilder.Entity<BuildingDbModel>().HasIndex(u => u.Name).IsUnique();
+        modelBuilder.Entity<SubjectDbModel>().HasIndex(u=>u.Name).IsUnique();
+
     }
 
     private readonly DateOnly endDateDefault = new(9999, 12, 31);
