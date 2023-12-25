@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TeamDevelopmentBackend.Migrations
 {
     [DbContext(typeof(DefaultDBContext))]
-    [Migration("20230222113553_lessonChange")]
-    partial class lessonChange
+    [Migration("20231225125213_full")]
+    partial class full
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,26 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Buildings");
+                });
+
+            modelBuilder.Entity("TeamDevelopmentBackend.Model.CounterStorageDbModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Last")
+                        .HasColumnType("numeric(20,0)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Counter");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.GroupDbModel", b =>
@@ -51,7 +70,21 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("TeamDevelopmentBackend.Model.IssuedTokenDbModel", b =>
+                {
+                    b.Property<decimal>("RefreshTokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("numeric(20,0)");
+
+                    b.HasKey("RefreshTokenId");
+
+                    b.ToTable("IssuedTokens");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.LessonDbModel", b =>
@@ -61,7 +94,9 @@ namespace TeamDevelopmentBackend.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValue(new DateOnly(9999, 12, 31));
 
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uuid");
@@ -123,11 +158,14 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });
@@ -153,14 +191,18 @@ namespace TeamDevelopmentBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("GroupId")
+                    b.Property<Guid?>("DefaultFilterId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Password")
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("bytea");
 
@@ -169,7 +211,8 @@ namespace TeamDevelopmentBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("Login")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -218,15 +261,6 @@ namespace TeamDevelopmentBackend.Migrations
                         .IsRequired();
 
                     b.Navigation("Building");
-                });
-
-            modelBuilder.Entity("TeamDevelopmentBackend.Model.UserDbModel", b =>
-                {
-                    b.HasOne("TeamDevelopmentBackend.Model.GroupDbModel", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
-
-                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("TeamDevelopmentBackend.Model.BuildingDbModel", b =>

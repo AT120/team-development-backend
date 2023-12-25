@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -24,6 +25,19 @@ namespace TeamDevelopmentBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Counter",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Last = table.Column<decimal>(type: "numeric(20,0)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Counter", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
@@ -36,11 +50,22 @@ namespace TeamDevelopmentBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IssuedTokens",
+                columns: table => new
+                {
+                    RefreshTokenId = table.Column<decimal>(type: "numeric(20,0)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IssuedTokens", x => x.RefreshTokenId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,6 +82,22 @@ namespace TeamDevelopmentBackend.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Teachers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Login = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<byte[]>(type: "bytea", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    DefaultFilterId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,26 +120,6 @@ namespace TeamDevelopmentBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Login = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<byte[]>(type: "bytea", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Lessons",
                 columns: table => new
                 {
@@ -108,7 +129,9 @@ namespace TeamDevelopmentBackend.Migrations
                     SubjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     TeacherId = table.Column<Guid>(type: "uuid", nullable: false),
                     GroupId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Date = table.Column<DateOnly>(type: "date", nullable: false)
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false, defaultValue: new DateOnly(9999, 12, 31)),
+                    WeekDay = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -140,6 +163,18 @@ namespace TeamDevelopmentBackend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Buildings_Name",
+                table: "Buildings",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_Name",
+                table: "Groups",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lessons_GroupId",
                 table: "Lessons",
                 column: "GroupId");
@@ -160,42 +195,40 @@ namespace TeamDevelopmentBackend.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Lessons_TimeSlot_Date_GroupId",
-                table: "Lessons",
-                columns: new[] { "TimeSlot", "Date", "GroupId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lessons_TimeSlot_Date_RoomId",
-                table: "Lessons",
-                columns: new[] { "TimeSlot", "Date", "RoomId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lessons_TimeSlot_Date_TeacherId",
-                table: "Lessons",
-                columns: new[] { "TimeSlot", "Date", "TeacherId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rooms_BuildingId",
                 table: "Rooms",
                 column: "BuildingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_GroupId",
+                name: "IX_Subjects_Name",
+                table: "Subjects",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Login",
                 table: "Users",
-                column: "GroupId");
+                column: "Login",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Counter");
+
+            migrationBuilder.DropTable(
+                name: "IssuedTokens");
+
+            migrationBuilder.DropTable(
                 name: "Lessons");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
@@ -205,9 +238,6 @@ namespace TeamDevelopmentBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Teachers");
-
-            migrationBuilder.DropTable(
-                name: "Groups");
 
             migrationBuilder.DropTable(
                 name: "Buildings");

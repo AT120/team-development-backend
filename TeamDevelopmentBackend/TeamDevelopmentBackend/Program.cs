@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TeamDevelopmentBackend;
 using TeamDevelopmentBackend.Filters;
 using TeamDevelopmentBackend.Model;
 using TeamDevelopmentBackend.Services;
@@ -134,6 +135,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
+app.MigrateDB<DefaultDBContext>();
 app.UseAuthentication();
 app.UseAuthorization();
 
