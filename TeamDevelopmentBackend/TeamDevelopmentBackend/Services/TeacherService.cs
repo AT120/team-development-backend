@@ -43,7 +43,7 @@ namespace TeamDevelopmentBackend.Services
             }
             else
             {
-                throw new ArgumentException("There is no teacher with this ID!");
+                throw new ArgumentException("There is no teacher with given ID!");
             }
 
         }
