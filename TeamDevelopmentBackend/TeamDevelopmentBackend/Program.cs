@@ -67,9 +67,7 @@ TokenParameters.AccessLifetime = Int32.Parse(
         ?? throw new NullReferenceException("Specify lifetime of token in appsetings file!")
 );
 
-TokenParameters.RefreshLifetime = Int32.Parse(
-    builder.Configuration["JwtSettings:RefreshLifetime"]
-        ?? throw new NullReferenceException("Specify lifetime of token in appsetings file!")
+nceException("Specify lifetime of token in appsetings file!")
 );
 
 TokenParameters.Key = new SymmetricSecurityKey(
